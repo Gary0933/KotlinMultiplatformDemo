@@ -8,39 +8,19 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import kotlinmultiplatformdemo.composeapp.generated.resources.Res
+import kotlinmultiplatformdemo.composeapp.generated.resources.lato_black_italic
+import kotlinmultiplatformdemo.composeapp.generated.resources.lato_bold
+import kotlinmultiplatformdemo.composeapp.generated.resources.lato_bold_italic
+import kotlinmultiplatformdemo.composeapp.generated.resources.lato_italic
+import kotlinmultiplatformdemo.composeapp.generated.resources.lato_light
+import kotlinmultiplatformdemo.composeapp.generated.resources.lato_light_italic
+import kotlinmultiplatformdemo.composeapp.generated.resources.lato_regular
+import kotlinmultiplatformdemo.composeapp.generated.resources.lato_thin
+import kotlinmultiplatformdemo.composeapp.generated.resources.lato_thin_italic
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.Font
 
 // Set of Material typography styles to start with
-
-val Typography = Typography(
-    headlineSmall = TextStyle(
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 24.sp,
-        fontFamily = FontFamily.Default
-    ),
-    titleLarge = TextStyle(
-        fontWeight = FontWeight.Normal,
-        fontSize = 18.sp,
-        fontFamily = FontFamily.Default
-    ),
-    bodyLarge = TextStyle(
-        fontWeight = FontWeight.Normal,
-        fontSize = 16.sp,
-        fontFamily = FontFamily.Default
-    ),
-    bodyMedium = TextStyle(
-        fontWeight = FontWeight.Medium,
-        fontSize = 14.sp,
-        fontFamily = FontFamily.Default
-    ),
-    labelMedium = TextStyle(
-        fontWeight = FontWeight.SemiBold,
-        fontSize = 12.sp,
-        fontFamily = FontFamily.Default
-    ),
-)
-/*
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun LatoTypography(): Typography {
@@ -130,4 +110,3 @@ fun LatoTypography(): Typography {
         ),
     )
 }
-*/
