@@ -60,6 +60,8 @@ android {
     sourceSets["main"].res.srcDirs("src/androidMain/res")
     sourceSets["main"].resources.srcDirs("src/commonMain/resources")
 
+    //sourceSets["main"].res.srcDirs("src/commonMain/composeResources", "src/androidMain/res") // 设置资源文件路径
+
     defaultConfig {
         applicationId = "org.example.demo"
         minSdk = libs.versions.android.minSdk.get().toInt()

@@ -5,13 +5,23 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 
-private val DarkColors = darkColorScheme(
-    primary = md_theme_dark_primary,
+private val darkColorPalette = darkColorScheme(
+    primary = PrimaryColor,
+    primaryContainer = PrimaryVariantColor,
+    secondary = AccentColor,
 )
 
-private val LightColors = lightColorScheme(
-    primary = md_theme_light_primary,
+private val lightColorPalette = lightColorScheme(
+    primary = PrimaryColor,
+    primaryContainer = PrimaryVariantColor,
+    secondary = AccentColor,
+    background = Color.White,
+    surfaceVariant = Color.White,
+    surface = lightSurface,
+
+
 )
 
 @Composable
@@ -19,14 +29,16 @@ fun DemoTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        darkTheme -> DarkColors
-        else -> LightColors
+    val colors = if (darkTheme) {
+        darkColorPalette
+    } else {
+        lightColorPalette
     }
 
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = colors,
         typography = Typography,
+        shapes = Shapes,
         content = content
     )
 }
