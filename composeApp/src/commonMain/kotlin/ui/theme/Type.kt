@@ -26,7 +26,7 @@ import org.jetbrains.compose.resources.Font
 fun LatoTypography(): Typography {
     val lato = FontFamily(
         Font(
-            resource = Res.font.lato_regular,
+            resource = Res.font.lato_regular, // 这里是composeApp->commonMain->composeResources->font下的字体文件
             weight = FontWeight.Normal,
             style = FontStyle.Normal
         ),
