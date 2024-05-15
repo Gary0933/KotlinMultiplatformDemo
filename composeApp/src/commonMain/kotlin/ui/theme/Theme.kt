@@ -37,7 +37,7 @@ fun DemoTheme(
 
     MaterialTheme(
         colorScheme = colors,
-        typography = Typography,
+        typography = LatoTypography(),
         shapes = Shapes,
         content = content
     )
