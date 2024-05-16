@@ -8,7 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import ui.navigation.AppNavigation
 import ui.screen.login.LoginScreen
-import ui.screen.main.MainNavigation
+import ui.screen.main.MainNavConfiguration
 import ui.theme.DemoTheme
 
 @Composable
@@ -28,7 +28,7 @@ fun App() {
                     LoginScreen(navController)
                 }
                 composable(route = AppNavigation.Main.route) {
-                    MainNavigation() // 跳转到主页的导航route配置
+                    MainNavConfiguration() // 跳转到主页的导航route配置
                 }
             }
         }

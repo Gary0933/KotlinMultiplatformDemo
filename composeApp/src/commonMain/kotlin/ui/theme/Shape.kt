@@ -5,6 +5,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuDefaults.textFieldColors
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Shapes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
@@ -37,4 +38,13 @@ fun DefaultButtonTheme() = ButtonDefaults.buttonColors(
     contentColor = MaterialTheme.colorScheme.background,
     // disabledBackgroundColor = MaterialTheme.colorScheme.background,
     disabledContentColor = MaterialTheme.colorScheme.primary
+)
+
+@Composable
+fun DefaultNavigationBarItemTheme() = NavigationBarItemDefaults.colors(
+    selectedIconColor = MaterialTheme.colorScheme.primary,
+    unselectedIconColor = MaterialTheme.colorScheme.primary,
+    unselectedTextColor = MaterialTheme.colorScheme.primary.copy(.7f),
+    selectedTextColor = MaterialTheme.colorScheme.primary,
+    indicatorColor = MaterialTheme.colorScheme.background,
 )
