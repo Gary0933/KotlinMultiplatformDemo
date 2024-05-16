@@ -47,6 +47,7 @@ kotlin {
 
             implementation(libs.compose.navigation)
             implementation(compose.material3)
+            api(libs.coil3)
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
