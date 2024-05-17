@@ -25,6 +25,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
+import androidx.compose.ui.text.AnnotatedString
 import kotlinmultiplatformdemo.composeapp.generated.resources.Res
 import kotlinmultiplatformdemo.composeapp.generated.resources.offer
 import org.jetbrains.compose.resources.ExperimentalResourceApi
@@ -53,7 +54,12 @@ fun ProfileMyCouponsScreen(
                 modifier = Modifier.fillMaxSize(),
             ) {
                 itemsIndexed (couponsList) {index, value ->
-                    Coupon(value)
+                    Coupon(
+                        couponContent = value,
+                        onExecuteCopyCode = {
+                            clipboardManager.setText(AnnotatedString(value.code))
+                        }
+                    )
                 }
             }
         }
@@ -62,7 +68,10 @@ fun ProfileMyCouponsScreen(
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun Coupon(couponContent: CouponContent) {
+fun Coupon(
+    couponContent: CouponContent,
+    onExecuteCopyCode: () -> Unit
+) {
     Box(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
         Box(
             modifier = Modifier.fillMaxWidth().height(180.dp)
@@ -93,7 +102,7 @@ fun Coupon(couponContent: CouponContent) {
             Box(
                 modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter)
                     .background(grey_050).noRippleClickable {
-
+                        onExecuteCopyCode()
                     },
                 contentAlignment = Alignment.Center
             ) {
