@@ -26,3 +26,7 @@ fun Spacer_16dp(){
 fun Spacer_32dp(){
     Spacer(modifier = Modifier.size(32.dp))
 }
+@Composable
+fun Spacer_50dp(){
+    Spacer(modifier = Modifier.size(50.dp))
+}

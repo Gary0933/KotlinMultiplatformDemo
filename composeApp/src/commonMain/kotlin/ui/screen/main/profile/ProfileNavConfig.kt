@@ -7,9 +7,12 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import ui.navigation.ProfileNavigation
+import ui.screen.main.profile.my_coupons.ProfileMyCouponsScreen
+import ui.screen.main.profile.my_orders.ProfileMyOrdersScreen
+import ui.screen.main.profile.settings.ProfileSettingsScreen
 
 @Composable
-fun ProfileNavConfiguration() {
+fun ProfileNavConfiguration(logout: () -> Unit) {
     val navigator = rememberNavController()
 
     NavHost(
@@ -18,7 +21,44 @@ fun ProfileNavConfiguration() {
         modifier = Modifier.fillMaxSize()
     ) {
         composable(route = ProfileNavigation.Profile.route) {
-            ProfileScreen()
+            ProfileScreen(
+                navigateToMyOrders = {
+                    navigator.navigate(ProfileNavigation.MyOrders.route)
+                },
+                navigateToMyCoupons = {
+                    navigator.navigate(ProfileNavigation.MyCoupons.route)
+                },
+                // 实现一个跳转到settings页面的行为，并作为参数传递给Profile页面，在Profile页面里可以使用这个函数来实现跳转
+                navigateToSettings = {
+                    navigator.navigate(ProfileNavigation.Settings.route)
+                },
+            )
+        }
+
+        composable(route = ProfileNavigation.MyOrders.route) {
+            ProfileMyOrdersScreen(
+                backOnTopBar = {
+                    navigator.popBackStack()
+                }
+            )
+        }
+
+        composable(route = ProfileNavigation.MyCoupons.route) {
+            ProfileMyCouponsScreen(
+                backOnTopBar = {
+                    navigator.popBackStack()
+                }
+            )
+        }
+
+        // 定义一个settings页面的路由
+        composable(route = ProfileNavigation.Settings.route) {
+            ProfileSettingsScreen(
+                backOnTopBar = {
+                    navigator.popBackStack()
+                },
+                logout = logout
+            )
         }
     }
 }

@@ -34,7 +34,7 @@ import ui.screen.main.profile.ProfileNavConfiguration
 import ui.theme.DefaultNavigationBarItemTheme
 
 @Composable
-fun MainNavConfiguration() {
+fun MainNavConfiguration(logout: () -> Unit) {
     val navBottomBarController = rememberNavController()
 
     ChangeStatusBarColors(Color.White) // 修改样式不支持跨平台，需要在各自的平台里实现(composeApp里各种模块的common文件夹下)
@@ -58,7 +58,9 @@ fun MainNavConfiguration() {
                     CartNavConfiguration()
                 }
                 composable(route = MainNavigation.Profile.route) {
-                    ProfileNavConfiguration()
+                    ProfileNavConfiguration(
+                        logout = logout
+                    )
                 }
             }
         }
@@ -79,8 +81,8 @@ fun BottomNavigationUI(
         modifier = Modifier.fillMaxWidth(),
         elevation = CardDefaults.cardElevation(10.dp),
         shape = RoundedCornerShape(
-            topStart = 16.dp,
-            topEnd = 16.dp
+            topStart = 8.dp,
+            topEnd = 8.dp
         )
     ) {
         NavigationBar(

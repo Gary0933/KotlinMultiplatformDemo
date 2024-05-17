@@ -45,7 +45,11 @@ import ui.components.noRippleClickable
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(
+    navigateToMyOrders: () -> Unit,
+    navigateToMyCoupons: () -> Unit,
+    navigateToSettings: () -> Unit
+) {
     Scaffold() {
         Box(
             modifier = Modifier.padding(top = it.calculateTopPadding())
@@ -96,16 +100,16 @@ fun ProfileScreen() {
 
                         }
                         ProfileItemBox(title = "My Orders", image = Res.drawable.order) {
-
+                            navigateToMyOrders()
                         }
                         ProfileItemBox(title = "My Coupons", image = Res.drawable.coupon) {
-
+                            navigateToMyCoupons()
                         }
                         ProfileItemBox(title = "My Wallet", image = Res.drawable.wallet) {
 
                         }
                         ProfileItemBox(title = "Settings", image = Res.drawable.setting2) {
-
+                            navigateToSettings() // 跳转到settings页面
                         }
                         ProfileItemBox(title = "Help Center", image = Res.drawable.warning, isLastItem = true) {
 

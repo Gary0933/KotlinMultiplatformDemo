@@ -16,19 +16,27 @@ import ui.theme.DemoTheme
 fun App() {
     DemoTheme{
 
-        val navController = rememberNavController()
+        val navigator = rememberNavController()
 
         Box(modifier = Modifier.fillMaxSize()) {
             NavHost(
-                navController = navController,
-                startDestination = AppNavigation.Login.route,
+                navController = navigator,
+                startDestination = AppNavigation.Login.route, // 定义初始页面是登录页面
                 modifier = Modifier.fillMaxSize()
             ) {
+                // 定义登录页面的渲染方法
                 composable(route = AppNavigation.Login.route) {
-                    LoginScreen(navController)
+                    LoginScreen(navigator)
                 }
                 composable(route = AppNavigation.Main.route) {
-                    MainNavConfiguration() // 跳转到主页的导航route配置
+                    // 跳转到主页的导航route配置
+                    MainNavConfiguration(
+                        // 实现MainNavConfiguration里的参数，参数是一个名为logout的函数，当后续使用这个logout函数后会跳转回登录页面
+                        logout = {
+                            navigator.popBackStack()
+                            navigator.navigate(AppNavigation.Login.route)
+                        }
+                    )
                 }
             }
         }
