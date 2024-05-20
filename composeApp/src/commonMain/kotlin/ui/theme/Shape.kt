@@ -2,6 +2,7 @@ package ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuDefaults.textFieldColors
 import androidx.compose.material3.MaterialTheme
@@ -47,4 +48,11 @@ fun DefaultNavigationBarItemTheme() = NavigationBarItemDefaults.colors(
     unselectedTextColor = MaterialTheme.colorScheme.primary.copy(.7f),
     selectedTextColor = MaterialTheme.colorScheme.primary,
     indicatorColor = MaterialTheme.colorScheme.background,
+)
+
+@Composable
+fun DefaultCheckBoxTheme() = CheckboxDefaults.colors(
+    checkedColor = MaterialTheme.colorScheme.primary,
+    uncheckedColor = MaterialTheme.colorScheme.primary,
+    checkmarkColor = MaterialTheme.colorScheme.background
 )

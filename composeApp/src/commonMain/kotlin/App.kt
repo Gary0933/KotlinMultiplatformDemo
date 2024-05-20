@@ -8,6 +8,7 @@ import androidx.navigation.compose.rememberNavController
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import ui.navigation.AppNavigation
 import ui.screen.login.LoginScreen
+import ui.screen.login.register.RegisterScreen
 import ui.screen.main.MainNavConfiguration
 import ui.theme.DemoTheme
 
@@ -26,7 +27,21 @@ fun App() {
             ) {
                 // 定义登录页面的渲染方法
                 composable(route = AppNavigation.Login.route) {
-                    LoginScreen(navigator)
+                    LoginScreen(
+                        navigateToMain = {
+                            navigator.navigate(AppNavigation.Main.route)
+                        },
+                        navigateToRegister = {
+                            navigator.navigate(AppNavigation.Register.route)
+                        }
+                    )
+                }
+                composable(route = AppNavigation.Register.route) {
+                    RegisterScreen(
+                        navigateToLogin = {
+                            navigator.popBackStack()
+                        }
+                    )
                 }
                 composable(route = AppNavigation.Main.route) {
                     // 跳转到主页的导航route配置

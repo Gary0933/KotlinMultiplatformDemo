@@ -5,7 +5,8 @@ sealed class AppNavigation(
 ) {
     data object Login : AppNavigation(route = "Login")
 
-    data object Main : AppNavigation(route = "Main")
+    data object Register : AppNavigation(route = "Register")
 
+    data object Main : AppNavigation(route = "Main")
 
 }
