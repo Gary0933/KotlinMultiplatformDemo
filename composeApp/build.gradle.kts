@@ -45,9 +45,10 @@ kotlin {
             implementation(compose.components.resources)
             implementation(compose.components.uiToolingPreview)
 
-            implementation(libs.compose.navigation)
-            implementation(compose.material3)
-            api(libs.coil3)
+            implementation(libs.compose.navigation) // 导航(route配置)
+            implementation(compose.material3) // UI库
+            api(libs.coil3) // 图片处理
+            api(libs.koin.core) // 依赖注入框架
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
