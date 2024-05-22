@@ -49,6 +49,7 @@ kotlin {
             implementation(compose.material3) // UI库
             api(libs.coil3) // 图片处理
             api(libs.koin.core) // 依赖注入框架
+            api(libs.koin.compose) // 依赖注入框架对于compose的扩展
         }
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
