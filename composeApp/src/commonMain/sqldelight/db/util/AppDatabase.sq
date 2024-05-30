@@ -1,0 +1,26 @@
+
+CREATE TABLE UserInfo (
+    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+    UserName TEXT NOT NULL,
+    UserEmail TEXT NOT NULL,
+    UserPassword TEXT NOT NULL,
+    CreateDate TEXT
+);
+
+getAllUserInfo:
+SELECT * FROM UserInfo;
+
+getUserInfoById:
+SELECT * FROM UserInfo WHERE Id == ?;
+
+insertUserInfo:
+INSERT INTO UserInfo(UserName, UserEmail, UserPassword)
+VALUES ?;
+
+deleteAllUserInfo:
+DELETE FROM UserInfo;
+
+deleteUserInfoById:
+DELETE FROM UserInfo WHERE Id == ?;
+
+

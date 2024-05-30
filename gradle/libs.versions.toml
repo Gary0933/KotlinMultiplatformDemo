@@ -19,6 +19,8 @@ accompanist-version = "0.33.2-alpha"
 coil3-io = "3.0.0-alpha01"
 koin = "3.4.3"
 koin-compose = "1.0.4"
+sqlDelight = "2.0.1"
+blankj-utilcode-ver = "1.30.7"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -38,9 +40,15 @@ system-ui-controller = {module = "com.google.accompanist:accompanist-systemuicon
 coil3 = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil3-io" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin-compose" }
+sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqlDelight" }
+sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
+sqldelight-native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelight" }
+sqldelight-desktop-driver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlDelight" }
+blankj-utilcode = { module = "com.blankj:utilcode", version.ref = "blankj-utilcode-ver" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 androidLibrary = { id = "com.android.library", version.ref = "agp" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+sqldelight = { id = "app.cash.sqldelight", version.ref = "sqlDelight" }

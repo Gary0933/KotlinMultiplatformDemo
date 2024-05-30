@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
+    alias(libs.plugins.sqldelight) // SQLDelight
 }
 
 kotlin {
@@ -30,13 +31,7 @@ kotlin {
     
     sourceSets {
         val desktopMain by getting
-        
-        androidMain.dependencies {
-            implementation(libs.compose.ui.tooling.preview)
-            implementation(libs.androidx.activity.compose)
 
-            implementation(libs.system.ui.controller)
-        }
         commonMain.dependencies {
             implementation(compose.runtime)
             implementation(compose.foundation)
@@ -50,9 +45,34 @@ kotlin {
             api(libs.coil3) // 图片处理
             api(libs.koin.core) // 依赖注入框架
             api(libs.koin.compose) // 依赖注入框架对于compose的扩展
+            implementation(libs.sqldelight.runtime) // SQLDelight
         }
+
+        androidMain.dependencies {
+            implementation(libs.compose.ui.tooling.preview)
+            implementation(libs.androidx.activity.compose)
+
+            implementation(libs.system.ui.controller)
+            implementation(libs.sqldelight.android.driver) // SQLDelight
+            api(libs.blankj.utilcode) // 获取android context用的到
+
+        }
+
+        iosMain.dependencies {
+            implementation(libs.sqldelight.native.driver) // SQLDelight
+        }
+
         desktopMain.dependencies {
             implementation(compose.desktop.currentOs)
+            implementation(libs.sqldelight.desktop.driver) // SQLDelight
+        }
+    }
+}
+
+sqldelight {
+    databases {
+        create("AppDatabase") { // 自定义数据库名
+            packageName.set("db.util") // 自定义包名
         }
     }
 }

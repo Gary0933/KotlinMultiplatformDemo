@@ -34,6 +34,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import database.entity.UserInfoModel
 import kotlinmultiplatformdemo.composeapp.generated.resources.Res
 import kotlinmultiplatformdemo.composeapp.generated.resources.agree_with
 import kotlinmultiplatformdemo.composeapp.generated.resources.already_have_account
@@ -55,6 +57,7 @@ import ui.components.Spacer_16dp
 import ui.components.Spacer_32dp
 import ui.components.Spacer_4dp
 import ui.components.Spacer_8dp
+import ui.screen.login.register.view_model.RegisterViewModel
 import ui.theme.DefaultButtonTheme
 import ui.theme.DefaultCheckBoxTheme
 import ui.theme.DefaultTextFieldTheme
@@ -70,6 +73,8 @@ fun RegisterScreen(
     val passwordTextState = remember { mutableStateOf("") }
     var isChecked by remember { mutableStateOf(false) }
     val isPasswordVisible = remember { mutableStateOf(false) }
+
+    val registerViewModel: RegisterViewModel = viewModel { RegisterViewModel() }
 
     BasicScreenUI(
         showTopBar = false,
@@ -218,7 +223,16 @@ fun RegisterScreen(
                     colors = DefaultButtonTheme(),
                     contentPadding = ButtonDefaults.ContentPadding,
                     onClick = {
-
+                        registerViewModel.register(
+                           UserInfoModel(
+                               Id = 0,
+                               UserName = nameTextState.value,
+                               UserEmail = emailTextState.value,
+                               UserPassword = passwordTextState.value,
+                               CreateDate = null
+                           )
+                        )
+                        navigateToLogin()
                     },
                 ) {
                     Row(

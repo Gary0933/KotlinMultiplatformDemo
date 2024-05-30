@@ -26,10 +26,14 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.text.AnnotatedString
+import androidx.lifecycle.viewmodel.compose.viewModel
+import database.entity.UserInfoModel
 import kotlinmultiplatformdemo.composeapp.generated.resources.Res
 import kotlinmultiplatformdemo.composeapp.generated.resources.offer
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import ui.components.noRippleClickable
+import ui.screen.login.register.view_model.RegisterViewModel
+import ui.screen.main.profile.my_coupons.view_model.ShowUsersViewModel
 import ui.theme.BorderColor
 import ui.theme.grey_050
 
@@ -38,6 +42,7 @@ fun ProfileMyCouponsScreen(
     backOnTopBar: () -> Unit,
 ) {
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
+    val showUsersViewModel: ShowUsersViewModel = viewModel { ShowUsersViewModel() }
 
     BasicScreenUI(
         toolbarTitle = "My Coupons",
@@ -53,12 +58,9 @@ fun ProfileMyCouponsScreen(
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
             ) {
-                itemsIndexed (couponsList) {index, value ->
-                    Coupon(
-                        couponContent = value,
-                        onExecuteCopyCode = {
-                            clipboardManager.setText(AnnotatedString(value.code))
-                        }
+                itemsIndexed (showUsersViewModel.getUsersData()) {index, value ->
+                    UserData(
+                        userInfoModel = value,
                     )
                 }
             }
@@ -68,10 +70,10 @@ fun ProfileMyCouponsScreen(
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
-fun Coupon(
-    couponContent: CouponContent,
-    onExecuteCopyCode: () -> Unit
+fun UserData(
+    userInfoModel: UserInfoModel,
 ) {
+
     Box(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
         Box(
             modifier = Modifier.fillMaxWidth().height(180.dp)
@@ -81,54 +83,11 @@ fun Coupon(
                 modifier = Modifier.fillMaxWidth().padding(16.dp).align(Alignment.TopCenter),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                Text(couponContent.title, style = MaterialTheme.typography.titleLarge)
-                Text(couponContent.description, style = MaterialTheme.typography.bodyMedium)
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
-                ) {
-                    Icon(
-                        painter = painterResource(Res.drawable.offer),
-                        null,
-                        tint = MaterialTheme.colorScheme.primary,
-                    )
-                    Text(
-                        "Get ${couponContent.offPercent}% OFF",
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                }
-            }
-
-            Box(
-                modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter)
-                    .background(grey_050).noRippleClickable {
-                        onExecuteCopyCode()
-                    },
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    "COPY CODE",
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier.padding(16.dp)
-                )
+                Text(userInfoModel.UserName, style = MaterialTheme.typography.titleLarge)
+                Text(userInfoModel.UserEmail, style = MaterialTheme.typography.titleLarge)
+                Text(userInfoModel.UserPassword, style = MaterialTheme.typography.titleLarge)
             }
         }
     }
 }
 
-data class CouponContent (
-    val title: String,
-    val description: String,
-    val code: String,
-    val offPercent: Int
-)
-
-val couponsList: List<CouponContent> = listOf(
-    CouponContent(title = "WELCOME24",description = "Add items worth $2 more to unlock",code = "SDSD23SD", offPercent = 50),
-    CouponContent(title = "BLACKFRIDAY24",description = "Add items worth $1 more to unlock",code = "S2323SD", offPercent = 75),
-    CouponContent(title = "HOLYDAY24",description = "Add items worth $15 more to unlock",code = "SFER23SD", offPercent = 15),
-    CouponContent(title = "WELCOME24",description = "Add items worth $2 more to unlock",code = "SDSD23SD", offPercent = 50),
-    CouponContent(title = "BLACKFRIDAY24",description = "Add items worth $1 more to unlock",code = "S2323SD", offPercent = 75),
-    CouponContent(title = "HOLYDAY24",description = "Add items worth $15 more to unlock",code = "SFER23SD", offPercent = 15),
-)
