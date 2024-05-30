@@ -1,23 +1,19 @@
-package ui.screen.main.profile.my_coupons
+package ui.screen.main.profile.show_users
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.jetbrains.compose.resources.painterResource
 import ui.components.BasicScreenUI
 import ui.components.Spacer_32dp
 import ui.components.Spacer_8dp
@@ -25,27 +21,21 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.ui.platform.ClipboardManager
 import androidx.compose.ui.platform.LocalClipboardManager
-import androidx.compose.ui.text.AnnotatedString
 import androidx.lifecycle.viewmodel.compose.viewModel
 import database.entity.UserInfoModel
-import kotlinmultiplatformdemo.composeapp.generated.resources.Res
-import kotlinmultiplatformdemo.composeapp.generated.resources.offer
 import org.jetbrains.compose.resources.ExperimentalResourceApi
-import ui.components.noRippleClickable
-import ui.screen.login.register.view_model.RegisterViewModel
-import ui.screen.main.profile.my_coupons.view_model.ShowUsersViewModel
+import ui.screen.main.profile.show_users.view_model.ShowUsersViewModel
 import ui.theme.BorderColor
-import ui.theme.grey_050
 
 @Composable
-fun ProfileMyCouponsScreen(
+fun ProfileShowUsersScreen(
     backOnTopBar: () -> Unit,
 ) {
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
     val showUsersViewModel: ShowUsersViewModel = viewModel { ShowUsersViewModel() }
 
     BasicScreenUI(
-        toolbarTitle = "My Coupons",
+        toolbarTitle = "Show Users",
         backOnTopBarOnClick = backOnTopBar,
     ) {
         Column(modifier = Modifier.fillMaxSize().padding(horizontal = 16.dp)) {
@@ -76,7 +66,8 @@ fun UserData(
 
     Box(modifier = Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
         Box(
-            modifier = Modifier.fillMaxWidth().height(180.dp)
+            modifier = Modifier
+                .fillMaxWidth()
                 .border(1.dp, BorderColor, MaterialTheme.shapes.medium)
         ) {
             Column(

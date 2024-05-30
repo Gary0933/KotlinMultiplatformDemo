@@ -2,4 +2,6 @@ package common
 
 import app.cash.sqldelight.db.SqlDriver
 
-expect fun createDriver(): SqlDriver
+expect class DatabaseDriverFactory() {
+    fun createDriver(): SqlDriver
+}

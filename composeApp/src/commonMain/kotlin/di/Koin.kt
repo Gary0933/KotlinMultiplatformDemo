@@ -1,10 +1,15 @@
 package di
 
+import common.DatabaseDriverFactory
+import database.DbEngine
 import org.koin.dsl.module
 
 
-class ComponentA()
-
 fun appModule() = module {
-    single { ComponentA() }
+    single {
+        DbEngine(databaseDriverFactory = get())
+    }
+    single {
+        DatabaseDriverFactory()
+    }
 }

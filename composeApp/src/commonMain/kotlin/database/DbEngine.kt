@@ -1,9 +1,9 @@
 package database
 
-import common.createDriver
+import common.DatabaseDriverFactory
 import db.util.AppDatabase
 
-internal class DbEngine {
-    private val database = AppDatabase(createDriver())
+internal class DbEngine(databaseDriverFactory: DatabaseDriverFactory) {
+    private val database = AppDatabase(databaseDriverFactory.createDriver())
     val dbQuery = database.appDatabaseQueries
 }

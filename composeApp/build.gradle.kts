@@ -121,6 +121,7 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = "org.example.demo"
             packageVersion = "1.0.0"
+            modules("java.sql") // SQLDelight
         }
     }
 }

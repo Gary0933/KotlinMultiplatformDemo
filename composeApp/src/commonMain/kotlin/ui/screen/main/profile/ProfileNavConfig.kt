@@ -7,9 +7,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import ui.navigation.ProfileNavigation
-import ui.screen.main.profile.my_coupons.ProfileMyCouponsScreen
 import ui.screen.main.profile.my_orders.ProfileMyOrdersScreen
 import ui.screen.main.profile.settings.ProfileSettingsScreen
+import ui.screen.main.profile.show_users.ProfileShowUsersScreen
 
 @Composable
 fun ProfileNavConfiguration(logout: () -> Unit) {
@@ -25,8 +25,8 @@ fun ProfileNavConfiguration(logout: () -> Unit) {
                 navigateToMyOrders = {
                     navigator.navigate(ProfileNavigation.MyOrders.route)
                 },
-                navigateToMyCoupons = {
-                    navigator.navigate(ProfileNavigation.MyCoupons.route)
+                navigateToShowUsers = {
+                    navigator.navigate(ProfileNavigation.ShowUsers.route)
                 },
                 // 实现一个跳转到settings页面的行为，并作为参数传递给Profile页面，在Profile页面里可以使用这个函数来实现跳转
                 navigateToSettings = {
@@ -43,8 +43,8 @@ fun ProfileNavConfiguration(logout: () -> Unit) {
             )
         }
 
-        composable(route = ProfileNavigation.MyCoupons.route) {
-            ProfileMyCouponsScreen(
+        composable(route = ProfileNavigation.ShowUsers.route) {
+            ProfileShowUsersScreen(
                 backOnTopBar = {
                     navigator.popBackStack()
                 }

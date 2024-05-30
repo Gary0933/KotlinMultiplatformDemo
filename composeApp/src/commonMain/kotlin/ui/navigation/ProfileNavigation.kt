@@ -10,6 +10,6 @@ sealed class ProfileNavigation(
     data object ManageAddress : ProfileNavigation(route = "ManageAddress", arguments = emptyList())
     data object PaymentMethod : ProfileNavigation(route = "PaymentMethod", arguments = emptyList())
     data object MyOrders : ProfileNavigation(route = "MyOrders", arguments = emptyList())
-    data object MyCoupons : ProfileNavigation(route = "MyCoupons", arguments = emptyList())
+    data object ShowUsers : ProfileNavigation(route = "ShowUsers", arguments = emptyList())
     data object Settings : ProfileNavigation(route = "Settings", arguments = emptyList())
 }

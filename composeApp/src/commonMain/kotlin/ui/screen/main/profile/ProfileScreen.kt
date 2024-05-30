@@ -47,7 +47,7 @@ import ui.components.noRippleClickable
 @Composable
 fun ProfileScreen(
     navigateToMyOrders: () -> Unit,
-    navigateToMyCoupons: () -> Unit,
+    navigateToShowUsers: () -> Unit,
     navigateToSettings: () -> Unit
 ) {
     Scaffold() {
@@ -102,8 +102,8 @@ fun ProfileScreen(
                         ProfileItemBox(title = "My Orders", image = Res.drawable.order) {
                             navigateToMyOrders()
                         }
-                        ProfileItemBox(title = "My Coupons", image = Res.drawable.coupon) {
-                            navigateToMyCoupons()
+                        ProfileItemBox(title = "Show Users", image = Res.drawable.coupon) {
+                            navigateToShowUsers()
                         }
                         ProfileItemBox(title = "My Wallet", image = Res.drawable.wallet) {
 
