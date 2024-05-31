@@ -1,6 +1,8 @@
 package ui.screen.login
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -10,7 +12,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Lock
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -19,10 +25,14 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
@@ -31,21 +41,21 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import kotlinmultiplatformdemo.composeapp.generated.resources.Res
 import kotlinmultiplatformdemo.composeapp.generated.resources.dont_have_an_account
-import kotlinmultiplatformdemo.composeapp.generated.resources.email
 import kotlinmultiplatformdemo.composeapp.generated.resources.ic_password_hide
 import kotlinmultiplatformdemo.composeapp.generated.resources.ic_password_show
-import kotlinmultiplatformdemo.composeapp.generated.resources.password
 import kotlinmultiplatformdemo.composeapp.generated.resources.sign_in
 import kotlinmultiplatformdemo.composeapp.generated.resources.sign_up
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import ui.components.Spacer_32dp
+import ui.components.Spacer_16dp
 import ui.components.Spacer_4dp
-import ui.components.Spacer_8dp
+import ui.components.Spacer_dp
 import ui.theme.DefaultButtonTheme
 import ui.theme.DefaultTextFieldTheme
 import ui.theme.IconColorGrey
+import ui.theme.PrimaryColor
+import ui.theme.placeholderGrey
 
 @OptIn(ExperimentalResourceApi::class)
 @Composable
@@ -53,64 +63,103 @@ fun LoginScreen(
     navigateToMain: () -> Unit,
     navigateToRegister: () -> Unit,
 ) {
-    val emailTextState = remember { mutableStateOf("") }
-    val passwordTextState = remember { mutableStateOf("") }
-    val isPasswordVisible = remember { mutableStateOf(false) }
+    var emailText by remember { mutableStateOf("") }
+    var passwordText by remember { mutableStateOf("") }
+    var isPasswordVisible by remember { mutableStateOf(false) }
+    var isUsernameError by rememberSaveable { mutableStateOf(false) }
+    var isPasswordError by rememberSaveable { mutableStateOf(false) }
 
     Column(
-        modifier = Modifier.fillMaxSize().padding(16.dp),
+        modifier = Modifier.fillMaxSize().padding(35.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Text(
             stringResource(Res.string.sign_in),
-            style = MaterialTheme.typography.displaySmall
+            fontWeight = FontWeight.Bold,
+            style = MaterialTheme.typography.displaySmall,
+            color = PrimaryColor
         )
-        Spacer_32dp()
-
+        Spacer_dp(60.dp)
 
         Column(
             horizontalAlignment = Alignment.Start
         ) {
-            // 登录帐号 lable
-            Text(stringResource(Res.string.email))
-            Spacer_4dp()
             // 登录输入框
             TextField(
-                value = emailTextState.value,
+                isError = isUsernameError,
+                value = emailText,
                 onValueChange = {
-                    emailTextState.value = it
+                    emailText = it
+                    isUsernameError = it.trim().isEmpty()
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(1.dp, PrimaryColor, MaterialTheme.shapes.medium),
                 colors = DefaultTextFieldTheme(),
-                shape = MaterialTheme.shapes.small,
+                shape = MaterialTheme.shapes.medium,
                 singleLine = true,
+                placeholder = {
+                    Text(
+                        text = "Please enter email",
+                        color = placeholderGrey
+                    )
+                },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Outlined.Person, // 使用Material图标
+                        contentDescription = "Account icon", // 内容描述，用于辅助功能
+                        modifier = Modifier.size(24.dp) // 可选，设置图标大小
+                    )
+                },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next,
                     keyboardType = KeyboardType.Email,
                 ),
             )
-
-            Spacer_8dp()
-
-            // 密码 lable
-            Text(stringResource(Res.string.password))
             Spacer_4dp()
+            AnimatedVisibility(visible = isUsernameError) {
+                Text(
+                    text = "Email cannot be empty",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
+
+            Spacer_16dp()
+
             // 密码输入框
             TextField(
-                value = passwordTextState.value,
+                isError = isPasswordError,
+                value = passwordText,
                 onValueChange = {
-                    passwordTextState.value = it
+                    passwordText = it
+                    isPasswordError = it.trim().isEmpty()
                 },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .border(1.dp, PrimaryColor, MaterialTheme.shapes.medium),
                 colors = DefaultTextFieldTheme(),
-                shape = MaterialTheme.shapes.small,
+                shape = MaterialTheme.shapes.medium,
                 readOnly = false,
+                placeholder = {
+                    Text(
+                        text = "Please enter password",
+                        color = placeholderGrey
+                    )
+                },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Outlined.Lock, // 使用Material图标
+                        contentDescription = "Password icon", // 内容描述，用于辅助功能
+                        modifier = Modifier.size(24.dp) // 可选，设置图标大小
+                    )
+                },
                 trailingIcon = { // 在输入框末尾添加一个图标
                     IconButton(onClick = {
-                        isPasswordVisible.value = !isPasswordVisible.value
+                        isPasswordVisible = !isPasswordVisible
                     }) {
-                        when (isPasswordVisible.value) {
+                        when (isPasswordVisible) {
                             true -> Icon(
                                 painter = painterResource(Res.drawable.ic_password_hide),
                                 contentDescription = null,
@@ -124,14 +173,22 @@ fun LoginScreen(
                         }
                     }
                 },
-                visualTransformation = when (isPasswordVisible.value) { // 根据isPasswordVisible的状态值来决定是否显示密码
+                visualTransformation = when (isPasswordVisible) { // 根据isPasswordVisible的状态值来决定是否显示密码
                     true -> VisualTransformation.None // 直接显示密码
                     false -> PasswordVisualTransformation() // 显示***
                 },
             )
+            Spacer_4dp()
+            AnimatedVisibility(visible = isPasswordError) {
+                Text(
+                    text = "Password cannot be empty",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
         }
 
-        Spacer_32dp()
+        Spacer_dp(80.dp)
 
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
@@ -151,7 +208,11 @@ fun LoginScreen(
                     .fillMaxWidth()
                     .height(60.dp),
                 onClick = {
-                    navigateToMain() // 跳转到主页面
+                    isUsernameError = emailText.trim().isEmpty()
+                    isPasswordError = passwordText.trim().isEmpty()
+                    if (!isUsernameError && !isPasswordError) {
+                        navigateToMain() // 跳转到主页面
+                    }
                 }
             ) {
                 Text(
@@ -170,6 +231,8 @@ fun LoginScreen(
             Spacer_4dp()
             Text(
                 modifier = Modifier.clickable {
+                    isUsernameError = false
+                    isPasswordError = false
                     navigateToRegister()
                 },
                 text = stringResource(Res.string.sign_up),
