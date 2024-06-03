@@ -1,21 +1,20 @@
 package ui.screen.login.register.view_model
 
 import androidx.lifecycle.ViewModel
-import common.DatabaseDriverFactory
 import database.DbEngine
+import database.entity.UserInfoHandler
 import database.entity.UserInfoModel
-import database.entity.insertUserInfo
-import db.util.AppDatabaseQueries
 
-class RegisterViewModel: ViewModel() {
+class RegisterViewModel(
+    db: DbEngine
+): ViewModel() {
 
-    private val dbQuery: AppDatabaseQueries = DbEngine(DatabaseDriverFactory()).dbQuery
+    private var userInfoHandler: UserInfoHandler = UserInfoHandler(db) // 操作userinfo表的数据
 
     fun register(
         userInfoModel: UserInfoModel
     ) {
-        insertUserInfo(
-            dbQuery,
+        userInfoHandler.insertUserInfo(
             userInfoModel
         )
     }
