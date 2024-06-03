@@ -50,7 +50,7 @@ fun ProfileScreen(
     navigateToShowUsers: () -> Unit,
     navigateToSettings: () -> Unit
 ) {
-    Scaffold() {
+    Scaffold {
         Box(
             modifier = Modifier.padding(top = it.calculateTopPadding())
                 .fillMaxSize()
@@ -93,6 +93,12 @@ fun ProfileScreen(
                         ProfileItemBox(title = "Edit profile", image = Res.drawable.profile2) {
 
                         }
+                        ProfileItemBox(title = "Settings", image = Res.drawable.setting2) {
+                            navigateToSettings() // 跳转到settings页面
+                        }
+                        ProfileItemBox(title = "Show Users", image = Res.drawable.coupon) {
+                            navigateToShowUsers()
+                        }
                         ProfileItemBox(title = "Manage Address", image = Res.drawable.location2) {
 
                         }
@@ -102,14 +108,8 @@ fun ProfileScreen(
                         ProfileItemBox(title = "My Orders", image = Res.drawable.order) {
                             navigateToMyOrders()
                         }
-                        ProfileItemBox(title = "Show Users", image = Res.drawable.coupon) {
-                            navigateToShowUsers()
-                        }
                         ProfileItemBox(title = "My Wallet", image = Res.drawable.wallet) {
 
-                        }
-                        ProfileItemBox(title = "Settings", image = Res.drawable.setting2) {
-                            navigateToSettings() // 跳转到settings页面
                         }
                         ProfileItemBox(title = "Help Center", image = Res.drawable.warning, isLastItem = true) {
 

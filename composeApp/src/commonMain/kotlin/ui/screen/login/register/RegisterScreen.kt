@@ -326,11 +326,9 @@ fun RegisterScreen(
 
                         registerViewModel.register(
                            UserInfoModel(
-                               Id = 0,
                                UserName = nameText,
                                UserEmail = emailText,
                                UserPassword = passwordText,
-                               CreateDate = null
                            )
                         )
                         navigateToLogin()

@@ -5,11 +5,11 @@ import db.util.UserInfo
 
 
 data class UserInfoModel(
-    val Id: Int,
+    val Id: Int = 0,
     val UserName: String,
     val UserEmail: String,
     val UserPassword: String,
-    val CreateDate: String? // 可以为空
+    val CreateDate: String? = null // 可以为空
 )
 
 class UserInfoHandler(

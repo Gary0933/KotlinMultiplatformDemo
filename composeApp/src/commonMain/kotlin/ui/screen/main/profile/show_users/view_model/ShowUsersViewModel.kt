@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import database.DbEngine
 import database.entity.UserInfoHandler
 import database.entity.UserInfoModel
+import kotlinx.coroutines.flow.MutableStateFlow
 
 class ShowUsersViewModel(
     db: DbEngine
@@ -11,7 +12,20 @@ class ShowUsersViewModel(
 
     private var userInfoHandler: UserInfoHandler = UserInfoHandler(db)
 
-    fun getUsersData(): List<UserInfoModel> {
+    var userListState: MutableStateFlow<List<UserInfoModel>> = MutableStateFlow( emptyList())
+
+    init {
+        userListState.value = getUsersData()
+    }
+
+    private fun getUsersData(): List<UserInfoModel> {
         return userInfoHandler.getAllUserInfo(null)
+    }
+
+    fun deleteUsersDataById(
+        userInfoModel: UserInfoModel
+    ) {
+        userInfoHandler.deleteUserInfo(userInfoModel)
+        userListState.value = getUsersData()
     }
 }
