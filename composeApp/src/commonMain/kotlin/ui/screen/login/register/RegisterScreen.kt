@@ -23,10 +23,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -41,8 +41,6 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import database.DbEngine
 import database.entity.UserInfoModel
 import kotlinmultiplatformdemo.composeapp.generated.resources.Res
 import kotlinmultiplatformdemo.composeapp.generated.resources.agree_with
@@ -63,7 +61,6 @@ import org.koin.compose.koinInject
 import ui.components.BasicScreenUI
 import ui.components.Spacer_32dp
 import ui.components.Spacer_4dp
-import ui.components.Spacer_50dp
 import ui.components.Spacer_8dp
 import ui.screen.login.register.view_model.RegisterViewModel
 import ui.theme.DefaultButtonTheme
@@ -75,7 +72,7 @@ import ui.theme.PrimaryColor
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun RegisterScreen(
-    db: DbEngine = koinInject(), // 创建操作数据的单例实例
+    registerViewModel: RegisterViewModel = koinInject(),
     navigateToLogin: () -> Unit
 ) {
     var nameText by remember { mutableStateOf("") }
@@ -85,8 +82,10 @@ fun RegisterScreen(
     var isChecked by remember { mutableStateOf(false) }
     var isPasswordVisible by remember { mutableStateOf(false) }
 
-    val registerViewModel: RegisterViewModel = viewModel { RegisterViewModel(db) }
-    val registerErrorState by registerViewModel.registerErrorState.collectAsState()
+    var nameError by rememberSaveable { mutableStateOf(false) }
+    var emailError by rememberSaveable { mutableStateOf(false) }
+    var passwordError by rememberSaveable { mutableStateOf(false) }
+    var confirmPasswordError by rememberSaveable { mutableStateOf(false) }
 
     BasicScreenUI(
         showTopBar = false,
@@ -120,11 +119,11 @@ fun RegisterScreen(
                 )
                 Spacer_8dp()
                 TextField(
-                    isError = registerErrorState.nameError,
+                    isError = nameError,
                     value = nameText,
                     onValueChange = {
                         nameText = it.trim()
-                        registerErrorState.nameError = it.trim().isEmpty() || it.trim().length > 12
+                        nameError = it.trim().isEmpty() || it.trim().length > 12
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -138,9 +137,9 @@ fun RegisterScreen(
                     ),
                 )
                 Spacer_4dp()
-                AnimatedVisibility(visible = registerErrorState.nameError) {
+                AnimatedVisibility(visible = nameError) {
                     Text(
-                        text = registerErrorState.nameErrorDescription,
+                        text = "Name length need between 1 to 12 digits",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.error
                     )
@@ -155,11 +154,11 @@ fun RegisterScreen(
                 )
                 Spacer_8dp()
                 TextField(
-                    isError = registerErrorState.emailError,
+                    isError = emailError,
                     value = emailText,
                     onValueChange = {
                         emailText = it.trim()
-                        registerErrorState.emailError = !Regex("""^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$""").matches(it.trim())
+                        emailError = !Regex("""^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$""").matches(it.trim())
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -173,9 +172,9 @@ fun RegisterScreen(
                     ),
                 )
                 Spacer_4dp()
-                AnimatedVisibility(visible = registerErrorState.emailError) {
+                AnimatedVisibility(visible = emailError) {
                     Text(
-                        text = registerErrorState.emailErrorDescription,
+                        text = "Please validate email format",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.error
                     )
@@ -190,7 +189,7 @@ fun RegisterScreen(
                 )
                 Spacer_8dp()
                 TextField(
-                    isError = registerErrorState.passwordError,
+                    isError = passwordError,
                     modifier = Modifier
                         .fillMaxWidth()
                         .border(1.dp, PrimaryColor, MaterialTheme.shapes.small),
@@ -200,7 +199,7 @@ fun RegisterScreen(
                     value = passwordText,
                     onValueChange = {
                         passwordText = it.trim()
-                        registerErrorState.passwordError = it.trim().length < 6 || it.trim().length > 12
+                        passwordError = it.trim().length < 6 || it.trim().length > 12
                     },
                     trailingIcon = { // 在输入框末尾添加一个图标
                         IconButton(onClick = {
@@ -231,9 +230,9 @@ fun RegisterScreen(
                     )
                 )
                 Spacer_4dp()
-                AnimatedVisibility(visible = registerErrorState.passwordError) {
+                AnimatedVisibility(visible = passwordError) {
                     Text(
-                        text = registerErrorState.passwordErrorDescription,
+                        text = "Password must between 6 to 12 digits",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.error
                     )
@@ -248,7 +247,7 @@ fun RegisterScreen(
                 )
                 Spacer_8dp()
                 TextField(
-                    isError = registerErrorState.confirmPasswordError,
+                    isError = confirmPasswordError,
                     modifier = Modifier
                         .fillMaxWidth()
                         .border(1.dp, PrimaryColor, MaterialTheme.shapes.small),
@@ -258,7 +257,7 @@ fun RegisterScreen(
                     value = confirmPasswordText,
                     onValueChange = {
                         confirmPasswordText = it.trim()
-                        registerErrorState.confirmPasswordError = confirmPasswordText.isEmpty() || confirmPasswordText != passwordText
+                        confirmPasswordError = confirmPasswordText.isEmpty() || confirmPasswordText != passwordText
                     },
                     visualTransformation = when (isPasswordVisible) { // 根据isPasswordVisible的状态值来决定是否显示密码
                         true -> VisualTransformation.None // 直接显示密码
@@ -270,9 +269,9 @@ fun RegisterScreen(
                     )
                 )
                 Spacer_4dp()
-                AnimatedVisibility(visible = registerErrorState.confirmPasswordError) {
+                AnimatedVisibility(visible = confirmPasswordError) {
                     Text(
-                        text = registerErrorState.confirmPasswordErrorDescription,
+                        text = "Confirm password were not same as password",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.error
                     )
@@ -323,11 +322,15 @@ fun RegisterScreen(
                     colors = DefaultButtonTheme(),
                     contentPadding = ButtonDefaults.ContentPadding,
                     onClick = {
+                        nameError = nameText.isEmpty()
+                        emailError = emailText.isEmpty()
+                        passwordError = passwordText.isEmpty()
+                        confirmPasswordError = confirmPasswordText.isEmpty()
                         if (
-                            nameText.isNotEmpty() &&
-                            emailText.isNotEmpty() &&
-                            passwordText.isNotEmpty() &&
-                            confirmPasswordText.isNotEmpty()
+                            !nameError &&
+                            !emailError &&
+                            !passwordError &&
+                            !confirmPasswordError
                         ) {
                             registerViewModel.register(
                                 UserInfoModel(

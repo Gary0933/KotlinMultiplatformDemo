@@ -48,27 +48,30 @@ class UserInfoHandler(
     internal fun insertUserInfo(
         item: UserInfoModel
     ) {
-        item.run {
-            db.dbQuery.insertUserInfo(
-                UserInfo(
-                    Id.toLong(),
-                    UserName,
-                    UserEmail,
-                    UserPassword,
-                    CreateDate
+        db.dbQuery.transaction {
+            item.run {
+                db.dbQuery.insertUserInfo(
+                    UserInfo(
+                        Id.toLong(),
+                        UserName,
+                        UserEmail,
+                        UserPassword,
+                        CreateDate
+                    )
                 )
-            )
+            }
         }
     }
 
     internal fun deleteUserInfo(
         userInfoModel: UserInfoModel?
     ) {
-        if (userInfoModel == null) {
-            db.dbQuery.deleteAllUserInfo()
-        }
-        else {
-            db.dbQuery.deleteUserInfoById(userInfoModel.Id.toLong())
+        db.dbQuery.transaction {
+            if (userInfoModel == null) {
+                db.dbQuery.deleteAllUserInfo()
+            } else {
+                db.dbQuery.deleteUserInfoById(userInfoModel.Id.toLong())
+            }
         }
     }
 }

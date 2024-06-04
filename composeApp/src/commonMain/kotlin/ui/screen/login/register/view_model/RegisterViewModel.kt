@@ -12,8 +12,6 @@ class RegisterViewModel(
 
     private var userInfoHandler: UserInfoHandler = UserInfoHandler(db) // 操作userinfo表的数据
 
-    var registerErrorState: MutableStateFlow<RegisterErrorState> = MutableStateFlow(RegisterErrorState())
-
     fun register(
         userInfoModel: UserInfoModel
     ) {

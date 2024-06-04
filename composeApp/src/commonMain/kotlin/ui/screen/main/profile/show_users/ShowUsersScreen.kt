@@ -25,8 +25,6 @@ import androidx.compose.material3.OutlinedCard
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import database.DbEngine
 import database.entity.UserInfoModel
 import org.koin.compose.koinInject
 import ui.components.noRippleClickable
@@ -36,10 +34,10 @@ import ui.theme.grey_050
 
 @Composable
 fun ProfileShowUsersScreen(
-    db: DbEngine = koinInject(),
+    showUsersViewModel: ShowUsersViewModel = koinInject(),
     backOnTopBar: () -> Unit,
 ) {
-    val showUsersViewModel: ShowUsersViewModel = viewModel { ShowUsersViewModel(db) }
+
     val userList: List<UserInfoModel> by showUsersViewModel.userListState.collectAsState()
 
     BasicScreenUI(
