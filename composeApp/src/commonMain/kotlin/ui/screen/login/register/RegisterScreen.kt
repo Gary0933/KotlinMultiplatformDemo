@@ -21,10 +21,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -82,13 +82,9 @@ fun RegisterScreen(
     var confirmPasswordText by remember { mutableStateOf("") }
     var isChecked by remember { mutableStateOf(false) }
     var isPasswordVisible by remember { mutableStateOf(false) }
-    var isUserNameError by rememberSaveable { mutableStateOf(false) }
-    var isUserEmailError by rememberSaveable { mutableStateOf(false) }
-    var isPasswordError by rememberSaveable { mutableStateOf(false) }
-    var isConfirmPasswordError by rememberSaveable { mutableStateOf(false) }
-    var isEmailValid by remember { mutableStateOf(true) }
 
     val registerViewModel: RegisterViewModel = viewModel { RegisterViewModel(db) }
+    val registerErrorState by registerViewModel.registerErrorState.collectAsState()
 
     BasicScreenUI(
         showTopBar = false,
@@ -119,11 +115,11 @@ fun RegisterScreen(
                 )
                 Spacer_8dp()
                 TextField(
-                    isError = isUserNameError,
+                    isError = registerErrorState.nameError,
                     value = nameText,
                     onValueChange = {
-                        nameText = it
-                        isUserNameError = it.trim().isEmpty()
+                        nameText = it.trim()
+                        registerErrorState.nameError = it.trim().isEmpty() || it.trim().length > 12
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -137,9 +133,9 @@ fun RegisterScreen(
                     ),
                 )
                 Spacer_4dp()
-                AnimatedVisibility(visible = isUserNameError) {
+                AnimatedVisibility(visible = registerErrorState.nameError) {
                     Text(
-                        text = "User name cannot be empty",
+                        text = registerErrorState.nameErrorDescription,
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.error
                     )
@@ -154,12 +150,11 @@ fun RegisterScreen(
                 )
                 Spacer_8dp()
                 TextField(
-                    isError = isUserEmailError,
+                    isError = registerErrorState.emailError,
                     value = emailText,
                     onValueChange = {
-                        emailText = it
-                        isEmailValid = Regex("""^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$""").matches(it)
-                        isUserEmailError = !isEmailValid
+                        emailText = it.trim()
+                        registerErrorState.emailError = !Regex("""^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$""").matches(it.trim())
                     },
                     modifier = Modifier
                         .fillMaxWidth()
@@ -173,9 +168,9 @@ fun RegisterScreen(
                     ),
                 )
                 Spacer_4dp()
-                AnimatedVisibility(visible = isUserEmailError) {
+                AnimatedVisibility(visible = registerErrorState.emailError) {
                     Text(
-                        text = "Please validate email format",
+                        text = registerErrorState.emailErrorDescription,
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.error
                     )
@@ -190,7 +185,7 @@ fun RegisterScreen(
                 )
                 Spacer_8dp()
                 TextField(
-                    isError = isPasswordError,
+                    isError = registerErrorState.passwordError,
                     modifier = Modifier
                         .fillMaxWidth()
                         .border(1.dp, PrimaryColor, MaterialTheme.shapes.small),
@@ -199,8 +194,8 @@ fun RegisterScreen(
                     readOnly = false,
                     value = passwordText,
                     onValueChange = {
-                        passwordText = it
-                        isPasswordError = it.length < 6 || it.length > 12
+                        passwordText = it.trim()
+                        registerErrorState.passwordError = it.trim().length < 6 || it.trim().length > 12
                     },
                     trailingIcon = { // 在输入框末尾添加一个图标
                         IconButton(onClick = {
@@ -231,9 +226,9 @@ fun RegisterScreen(
                     )
                 )
                 Spacer_4dp()
-                AnimatedVisibility(visible = isPasswordError) {
+                AnimatedVisibility(visible = registerErrorState.passwordError) {
                     Text(
-                        text = "Password must between 6 to 12 digits",
+                        text = registerErrorState.passwordErrorDescription,
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.error
                     )
@@ -248,7 +243,7 @@ fun RegisterScreen(
                 )
                 Spacer_8dp()
                 TextField(
-                    isError = isConfirmPasswordError,
+                    isError = registerErrorState.confirmPasswordError,
                     modifier = Modifier
                         .fillMaxWidth()
                         .border(1.dp, PrimaryColor, MaterialTheme.shapes.small),
@@ -257,8 +252,8 @@ fun RegisterScreen(
                     readOnly = false,
                     value = confirmPasswordText,
                     onValueChange = {
-                        confirmPasswordText = it
-                        isConfirmPasswordError = confirmPasswordText != passwordText
+                        confirmPasswordText = it.trim()
+                        registerErrorState.confirmPasswordError = confirmPasswordText.isEmpty() || confirmPasswordText != passwordText
                     },
                     visualTransformation = when (isPasswordVisible) { // 根据isPasswordVisible的状态值来决定是否显示密码
                         true -> VisualTransformation.None // 直接显示密码
@@ -270,9 +265,9 @@ fun RegisterScreen(
                     )
                 )
                 Spacer_4dp()
-                AnimatedVisibility(visible = isConfirmPasswordError) {
+                AnimatedVisibility(visible = registerErrorState.confirmPasswordError) {
                     Text(
-                        text = "Confirm password were not same as password",
+                        text = registerErrorState.confirmPasswordErrorDescription,
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.error
                     )
@@ -323,15 +318,21 @@ fun RegisterScreen(
                     colors = DefaultButtonTheme(),
                     contentPadding = ButtonDefaults.ContentPadding,
                     onClick = {
-
-                        registerViewModel.register(
-                           UserInfoModel(
-                               UserName = nameText,
-                               UserEmail = emailText,
-                               UserPassword = passwordText,
-                           )
-                        )
-                        navigateToLogin()
+                        if (
+                            nameText.isNotEmpty() &&
+                            emailText.isNotEmpty() &&
+                            passwordText.isNotEmpty() &&
+                            confirmPasswordText.isNotEmpty()
+                        ) {
+                            registerViewModel.register(
+                                UserInfoModel(
+                                    UserName = nameText,
+                                    UserEmail = emailText,
+                                    UserPassword = passwordText,
+                                )
+                            )
+                            navigateToLogin()
+                        }
                     },
                 ) {
                     Row(
