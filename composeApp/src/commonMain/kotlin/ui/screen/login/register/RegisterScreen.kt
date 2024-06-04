@@ -11,7 +11,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
@@ -90,7 +92,10 @@ fun RegisterScreen(
         showTopBar = false,
     ) {
         Column(
-            modifier = Modifier.fillMaxSize().padding(35.dp),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 35.dp)
+                .verticalScroll(rememberScrollState()), // 可以垂直滚动页面
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ) {
@@ -101,7 +106,7 @@ fun RegisterScreen(
                 fontWeight = FontWeight.Bold,
                 color = PrimaryColor
             )
-            Spacer_50dp()
+            Spacer_32dp()
 
             // 填写部分
             Column(
