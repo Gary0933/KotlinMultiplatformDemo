@@ -21,6 +21,8 @@ koin = "3.4.3"
 koin-compose = "1.0.4"
 sqlDelight = "2.0.1"
 blankj-utilcode-ver = "1.30.7"
+kotlinx-coroutines-ver = "1.9.0-RC"
+stately-common-ver = "2.0.5"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -41,10 +43,14 @@ coil3 = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil3-io" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
 koin-compose = { module = "io.insert-koin:koin-compose", version.ref = "koin-compose" }
 sqldelight-runtime = { module = "app.cash.sqldelight:runtime", version.ref = "sqlDelight" }
+sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqlDelight" }
 sqldelight-android-driver = { module = "app.cash.sqldelight:android-driver", version.ref = "sqlDelight" }
 sqldelight-native-driver = { module = "app.cash.sqldelight:native-driver", version.ref = "sqlDelight" }
 sqldelight-desktop-driver = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqlDelight" }
 blankj-utilcode = { module = "com.blankj:utilcode", version.ref = "blankj-utilcode-ver" }
+kotlinx-coroutines-core = {module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines-ver"}
+kotlinx-coroutines-andriod = {module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines-ver"}
+stately-common = {module = "co.touchlab:stately-common", version.ref = "stately-common-ver"}
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

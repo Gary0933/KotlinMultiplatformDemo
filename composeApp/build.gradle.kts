@@ -46,6 +46,8 @@ kotlin {
             api(libs.koin.core) // 依赖注入框架
             api(libs.koin.compose) // 依赖注入框架对于compose的扩展
             implementation(libs.sqldelight.runtime) // SQLDelight
+            implementation(libs.sqldelight.coroutines) // SQLDelight
+            implementation(libs.kotlinx.coroutines.core) // 携程支持
         }
 
         androidMain.dependencies {
@@ -55,11 +57,13 @@ kotlin {
             implementation(libs.system.ui.controller)
             implementation(libs.sqldelight.android.driver) // SQLDelight
             api(libs.blankj.utilcode) // 获取android context用的到
+            implementation(libs.kotlinx.coroutines.andriod) // 携程支持
 
         }
 
         iosMain.dependencies {
             implementation(libs.sqldelight.native.driver) // SQLDelight
+            implementation(libs.stately.common) // 修复SQLDelight在IOS编译时报错 Could not find "co.touchlab:stately-common"
         }
 
         desktopMain.dependencies {

@@ -4,7 +4,10 @@ import androidx.lifecycle.ViewModel
 import database.DbEngine
 import database.entity.UserInfoHandler
 import database.entity.UserInfoModel
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 
 class ShowUsersViewModel(
     db: DbEngine
@@ -12,20 +15,22 @@ class ShowUsersViewModel(
 
     private var userInfoHandler: UserInfoHandler = UserInfoHandler(db)
 
-    var userListState: MutableStateFlow<List<UserInfoModel>> = MutableStateFlow( emptyList())
+    private val _userListState = MutableStateFlow(emptyList<UserInfoModel>())
+    val userListState: StateFlow<List<UserInfoModel>> = _userListState
 
-    init {
-        userListState.value = getUsersData()
-    }
-
-    private fun getUsersData(): List<UserInfoModel> {
-        return userInfoHandler.getAllUserInfo(null)
+    suspend fun getUsersData() {
+        coroutineScope { // 创建一个携程
+            launch {
+                userInfoHandler.getAllUserInfoFlow(null).collect{ userInfoList ->
+                    _userListState.value = userInfoList // 获取用户的实时数据
+                }
+            }
+        }
     }
 
     fun deleteUsersDataById(
         userInfoModel: UserInfoModel
     ) {
         userInfoHandler.deleteUserInfo(userInfoModel)
-        userListState.value = getUsersData()
     }
 }

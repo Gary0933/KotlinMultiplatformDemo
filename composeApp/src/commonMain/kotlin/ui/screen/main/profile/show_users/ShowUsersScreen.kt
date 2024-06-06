@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.sp
@@ -38,7 +39,12 @@ fun ProfileShowUsersScreen(
     backOnTopBar: () -> Unit,
 ) {
 
-    val userList: List<UserInfoModel> by showUsersViewModel.userListState.collectAsState()
+    LaunchedEffect(Unit) {
+        showUsersViewModel.getUsersData()
+    }
+
+    // 获取用户实时的数据
+    val userListState: List<UserInfoModel> by showUsersViewModel.userListState.collectAsState()
 
     BasicScreenUI(
         toolbarTitle = "Show Users",
@@ -55,7 +61,7 @@ fun ProfileShowUsersScreen(
                 modifier = Modifier.fillMaxSize(),
             ) {
                 itemsIndexed (
-                    userList
+                    userListState
                 ) {index, value ->
                     UserData(
                         showUsersViewModel,
