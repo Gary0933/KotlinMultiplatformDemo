@@ -21,7 +21,7 @@ class ShowUsersViewModel(
     suspend fun getUsersData() {
         coroutineScope { // 创建一个携程
             launch {
-                userInfoHandler.getAllUserInfoFlow(null).collect{ userInfoList ->
+                userInfoHandler.getAllUserInfoFlow(null).collect { userInfoList ->
                     _userListState.value = userInfoList // 获取用户的实时数据
                 }
             }
