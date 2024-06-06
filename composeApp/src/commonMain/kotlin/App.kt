@@ -5,9 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import di.appModule
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.koin.compose.KoinApplication
 import ui.navigation.AppNavigation
 import ui.screen.login.LoginScreen
 import ui.screen.login.register.RegisterScreen
@@ -17,9 +15,9 @@ import ui.theme.DemoTheme
 @Composable
 @Preview
 fun App() {
-    KoinApplication(application = { // 依赖注入管理
-        modules(appModule()) // 导入定义的module
-    }) {
+    //KoinApplication(application = { // 依赖注入管理
+        //modules(appModule()) // 导入定义的module
+    //}) {
 
         DemoTheme{
 
@@ -63,4 +61,4 @@ fun App() {
             }
         }
     }
-}
+//}

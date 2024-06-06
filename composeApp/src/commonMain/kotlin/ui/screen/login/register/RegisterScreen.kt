@@ -41,6 +41,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import database.entity.UserInfoModel
 import kotlinmultiplatformdemo.composeapp.generated.resources.Res
 import kotlinmultiplatformdemo.composeapp.generated.resources.agree_with
@@ -57,7 +58,6 @@ import kotlinmultiplatformdemo.composeapp.generated.resources.terms_condition
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.koinInject
 import ui.components.BasicScreenUI
 import ui.components.Spacer_32dp
 import ui.components.Spacer_4dp
@@ -72,9 +72,11 @@ import ui.theme.PrimaryColor
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun RegisterScreen(
-    registerViewModel: RegisterViewModel = koinInject(),
+    //registerViewModel: RegisterViewModel = koinInject(),
     navigateToLogin: () -> Unit
 ) {
+    val registerViewModel: RegisterViewModel = viewModel {RegisterViewModel()}
+
     var nameText by remember { mutableStateOf("") }
     var emailText by remember { mutableStateOf("") }
     var passwordText by remember { mutableStateOf("") }

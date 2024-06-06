@@ -22,11 +22,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.OutlinedCard
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import database.entity.UserInfoModel
-import org.koin.compose.koinInject
 import ui.components.noRippleClickable
 import ui.screen.main.profile.show_users.view_model.ShowUsersViewModel
 import ui.theme.BorderColor
@@ -34,11 +35,17 @@ import ui.theme.grey_050
 
 @Composable
 fun ProfileShowUsersScreen(
-    showUsersViewModel: ShowUsersViewModel = koinInject(),
+    //showUsersViewModel: ShowUsersViewModel = koinInject(),
     backOnTopBar: () -> Unit,
 ) {
+    val showUsersViewModel: ShowUsersViewModel = viewModel { ShowUsersViewModel() }
+    // 在组件首次创建时，开启一个携程获取所有用户的数据
+    LaunchedEffect(Unit) {
+        //showUsersViewModel.getUsersData()
+    }
 
-    val userList: List<UserInfoModel> by showUsersViewModel.userListState.collectAsState()
+    // 获取用户实时的数据
+    val userListState: List<UserInfoModel> by showUsersViewModel.userListState.collectAsState()
 
     BasicScreenUI(
         toolbarTitle = "Show Users",
@@ -55,7 +62,7 @@ fun ProfileShowUsersScreen(
                 modifier = Modifier.fillMaxSize(),
             ) {
                 itemsIndexed (
-                    userList
+                    userListState
                 ) {index, value ->
                     UserData(
                         showUsersViewModel,

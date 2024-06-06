@@ -1,7 +1,13 @@
 package database.entity
 
+import app.cash.sqldelight.coroutines.asFlow
+import app.cash.sqldelight.coroutines.mapToList
 import database.DbEngine
 import db.util.UserInfo
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
+import kotlinx.coroutines.flow.Flow
+import kotlin.coroutines.CoroutineContext
 
 
 data class UserInfoModel(
@@ -13,7 +19,8 @@ data class UserInfoModel(
 )
 
 class UserInfoHandler(
-    private var db: DbEngine
+    private var db: DbEngine,
+    //private var coroutineContext: CoroutineContext = Dispatchers.IO
 ) {
     // 由于数据库的类型跟kotlin定义的类型有区别，需要转换
     private fun mapUserInfoList(
@@ -74,6 +81,22 @@ class UserInfoHandler(
             }
         }
     }
+
+
+    /*
+    internal fun getAllUserInfoFlow(
+        userInfoModel: UserInfoModel?
+    ): Flow<List<UserInfoModel>> {  // 返回一个存储实时数据的Flow
+        return if (userInfoModel == null) {
+            db.dbQuery.getAllUserInfo(::mapUserInfoList).asFlow().mapToList(coroutineContext)
+        } else {
+            db.dbQuery.getUserInfoById(
+                userInfoModel.Id.toLong(),
+                ::mapUserInfoList
+            ).asFlow().mapToList(coroutineContext)
+        }
+    }
+     */
 }
 
 
