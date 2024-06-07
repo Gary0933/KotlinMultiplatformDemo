@@ -359,10 +359,8 @@ fun RegisterScreen(
                                     UserName = nameText,
                                     UserEmail = emailText,
                                     UserPassword = passwordText,
-                                ),
-                                navigateToLogin = navigateToLogin
+                                )
                             )
-                            //navigateToLogin()
                         }
                     },
                 ) {

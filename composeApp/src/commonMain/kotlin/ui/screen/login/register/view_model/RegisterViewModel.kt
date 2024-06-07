@@ -30,7 +30,6 @@ class RegisterViewModel(
 
     fun register(
         userInfoModel: UserInfoModel,
-        navigateToLogin: () -> Unit
     ) {
         flow<DbOperationState<Any>> {
             emit(DbOperationState.OperateState(true)) // 状态更新,现在处于操作数据的阶段
