@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.MaterialTheme
@@ -20,6 +21,7 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun BasicScreenUI(
     showTopBar: Boolean = true,
+    showSnackBar: Boolean = false,
     toolbarTitle: String? = null,
     backOnTopBarOnClick: () -> Unit = {},
     content: @Composable () -> Unit,
@@ -33,6 +35,7 @@ fun BasicScreenUI(
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     CircleButton(
+                        modifier = Modifier.size(50.dp),
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
                         onClick = { backOnTopBarOnClick() }
                     )
@@ -42,7 +45,7 @@ fun BasicScreenUI(
                             style = MaterialTheme.typography.titleLarge
                         )
                     }
-                    Spacer_50dp()
+                    Spacer_50dp() // 这里的大小要跟上面CircleButton保持一致，才能保证Text居中显示
                 }
             }
         }
@@ -54,6 +57,12 @@ fun BasicScreenUI(
             contentAlignment = Alignment.Center
         ) {
             content()
+
+            ShowSnackBar(
+                title = "Register Successful",
+                snackBarVisibleState = showSnackBar,
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
         }
     }
 }

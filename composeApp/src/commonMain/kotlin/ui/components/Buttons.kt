@@ -17,12 +17,12 @@ import ui.theme.BorderColor
 
 @Composable
 fun CircleButton(
-    modifier : Modifier = Modifier,
+    modifier: Modifier = Modifier,
     imageVector: ImageVector,
     onClick: () -> Unit
 ) {
     Card(
-        modifier = modifier.size(50.dp),
+        modifier = modifier,
         shape = CircleShape,
         elevation = CardDefaults.cardElevation(0.dp),
         border = BorderStroke(1.dp, BorderColor),

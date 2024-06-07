@@ -4,6 +4,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
@@ -23,6 +25,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -41,6 +45,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import business.data_state.ManageUiState
 import database.entity.UserInfoModel
 import kotlinmultiplatformdemo.composeapp.generated.resources.Res
 import kotlinmultiplatformdemo.composeapp.generated.resources.agree_with
@@ -54,11 +59,13 @@ import kotlinmultiplatformdemo.composeapp.generated.resources.password
 import kotlinmultiplatformdemo.composeapp.generated.resources.sign_in
 import kotlinmultiplatformdemo.composeapp.generated.resources.sign_up
 import kotlinmultiplatformdemo.composeapp.generated.resources.terms_condition
+import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.koinInject
 import ui.components.BasicScreenUI
+import ui.components.LoadingBar
 import ui.components.Spacer_32dp
 import ui.components.Spacer_4dp
 import ui.components.Spacer_8dp
@@ -87,8 +94,19 @@ fun RegisterScreen(
     var passwordError by rememberSaveable { mutableStateOf(false) }
     var confirmPasswordError by rememberSaveable { mutableStateOf(false) }
 
+    val uiState: ManageUiState by registerViewModel.uiState.collectAsState()
+
+    LaunchedEffect(uiState.showAlert) {
+        if (uiState.showAlert) {
+            delay(3000)
+            uiState.showAlert = false
+            navigateToLogin() // 注册成功的弹窗关闭后, 自动跳转到登录页面
+        }
+    }
+
     BasicScreenUI(
         showTopBar = false,
+        showSnackBar = uiState.showAlert
     ) {
         Column(
             modifier = Modifier
@@ -120,6 +138,7 @@ fun RegisterScreen(
                 Spacer_8dp()
                 TextField(
                     isError = nameError,
+                    enabled = uiState.enableTextField,
                     value = nameText,
                     onValueChange = {
                         nameText = it.trim()
@@ -155,6 +174,7 @@ fun RegisterScreen(
                 Spacer_8dp()
                 TextField(
                     isError = emailError,
+                    enabled = uiState.enableTextField,
                     value = emailText,
                     onValueChange = {
                         emailText = it.trim()
@@ -190,6 +210,7 @@ fun RegisterScreen(
                 Spacer_8dp()
                 TextField(
                     isError = passwordError,
+                    enabled = uiState.enableTextField,
                     modifier = Modifier
                         .fillMaxWidth()
                         .border(1.dp, PrimaryColor, MaterialTheme.shapes.small),
@@ -248,6 +269,7 @@ fun RegisterScreen(
                 Spacer_8dp()
                 TextField(
                     isError = confirmPasswordError,
+                    enabled = uiState.enableTextField,
                     modifier = Modifier
                         .fillMaxWidth()
                         .border(1.dp, PrimaryColor, MaterialTheme.shapes.small),
@@ -337,20 +359,40 @@ fun RegisterScreen(
                                     UserName = nameText,
                                     UserEmail = emailText,
                                     UserPassword = passwordText,
-                                )
+                                ),
+                                navigateToLogin = navigateToLogin
                             )
-                            navigateToLogin()
+                            //navigateToLogin()
                         }
                     },
                 ) {
                     Row(
+                        modifier = Modifier
+                            .fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                        horizontalArrangement = Arrangement.SpaceBetween,
                     ) {
+                        Box (
+                            Modifier
+                                .weight(1f),
+                            contentAlignment = Alignment.CenterEnd
+                        ) {
+                            LoadingBar(
+                                showLoading = uiState.showLoadingBar,
+                                modifier = Modifier
+                                    .size(25.dp),
+                                strokeWidth = 2.dp,
+                                color = MaterialTheme.colorScheme.background
+                            )
+                        }
+
                         Text(
                             text = stringResource(Res.string.sign_up),
-                            style = MaterialTheme.typography.bodyLarge
+                            style = MaterialTheme.typography.bodyLarge,
+                            modifier = Modifier.padding(horizontal = 30.dp)
                         )
+
+                        Spacer(Modifier.weight(1f))
                     }
                 }
                 Spacer(Modifier.height(32.dp))

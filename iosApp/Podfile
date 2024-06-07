@@ -1,0 +1,5 @@
+target 'iosApp' do
+
+    pod 'sqlite3', '~> 3.42.0'
+
+end
