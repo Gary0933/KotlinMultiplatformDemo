@@ -63,13 +63,12 @@ import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
-import org.koin.compose.koinInject
 import ui.components.BasicScreenUI
 import ui.components.LoadingBar
 import ui.components.Spacer_32dp
 import ui.components.Spacer_4dp
 import ui.components.Spacer_8dp
-import ui.screen.login.register.view_model.RegisterViewModel
+import ui.screen.login.view_model.LoginViewModel
 import ui.theme.DefaultButtonTheme
 import ui.theme.DefaultCheckBoxTheme
 import ui.theme.DefaultTextFieldTheme
@@ -79,7 +78,7 @@ import ui.theme.PrimaryColor
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun RegisterScreen(
-    registerViewModel: RegisterViewModel = koinInject(),
+    loginViewModel: LoginViewModel,
     navigateToLogin: () -> Unit
 ) {
     var nameText by remember { mutableStateOf("") }
@@ -94,19 +93,19 @@ fun RegisterScreen(
     var passwordError by rememberSaveable { mutableStateOf(false) }
     var confirmPasswordError by rememberSaveable { mutableStateOf(false) }
 
-    val uiState: ManageUiState by registerViewModel.uiState.collectAsState()
+    val uiState: ManageUiState by loginViewModel.uiState.collectAsState()
 
-    LaunchedEffect(uiState.showAlert) {
-        if (uiState.showAlert) {
-            delay(3000)
-            uiState.showAlert = false
+    LaunchedEffect(uiState.showRegisterSuccessAlert) {
+        if (uiState.showRegisterSuccessAlert) {
+            delay(2000)
+            loginViewModel.closeRegisterSuccessAlert()
             navigateToLogin() // 注册成功的弹窗关闭后, 自动跳转到登录页面
         }
     }
 
     BasicScreenUI(
         showTopBar = false,
-        showSnackBar = uiState.showAlert
+        uiState = uiState
     ) {
         Column(
             modifier = Modifier
@@ -354,7 +353,7 @@ fun RegisterScreen(
                             !passwordError &&
                             !confirmPasswordError
                         ) {
-                            registerViewModel.register(
+                            loginViewModel.register(
                                 UserInfoModel(
                                     UserName = nameText,
                                     UserEmail = emailText,

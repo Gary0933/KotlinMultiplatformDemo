@@ -17,11 +17,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import business.data_state.ManageUiState
 
 @Composable
 fun BasicScreenUI(
     showTopBar: Boolean = true,
-    showSnackBar: Boolean = false,
+    uiState: ManageUiState? = null,
     toolbarTitle: String? = null,
     backOnTopBarOnClick: () -> Unit = {},
     content: @Composable () -> Unit,
@@ -58,11 +59,13 @@ fun BasicScreenUI(
         ) {
             content()
 
-            ShowSnackBar(
-                title = "Register Successful",
-                snackBarVisibleState = showSnackBar,
-                modifier = Modifier.align(Alignment.BottomCenter)
-            )
+            if (uiState != null) {
+                ShowSnackBar(
+                    title = uiState.registerSuccessAlertMessage,
+                    snackBarVisibleState = uiState.showRegisterSuccessAlert,
+                    modifier = Modifier.align(Alignment.BottomCenter)
+                )
+            }
         }
     }
 }

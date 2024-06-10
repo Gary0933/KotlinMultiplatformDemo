@@ -15,7 +15,6 @@ fun ShowSnackBar(
     snackBarVisibleState: Boolean
 ) {
 
-
     if (snackBarVisibleState) {
         // Show the SnackBar
         Snackbar(

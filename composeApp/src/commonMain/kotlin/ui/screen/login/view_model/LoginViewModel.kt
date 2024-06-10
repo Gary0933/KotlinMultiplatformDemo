@@ -1,4 +1,4 @@
-package ui.screen.login.register.view_model
+package ui.screen.login.view_model
 
 import androidx.lifecycle.ViewModel
 import business.data_state.DbOperationState
@@ -18,7 +18,7 @@ import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
 import kotlin.coroutines.CoroutineContext
 
-class RegisterViewModel(
+class LoginViewModel(
     db: DbEngine,
 ): ViewModel() {
 
@@ -26,14 +26,14 @@ class RegisterViewModel(
     private var userInfoHandler: UserInfoHandler = UserInfoHandler(db) // 操作userinfo表的数据
 
     private val _uiState = MutableStateFlow(ManageUiState())
-    val uiState: StateFlow<ManageUiState> = _uiState
+    var uiState: StateFlow<ManageUiState> = _uiState
 
     fun register(
         userInfoModel: UserInfoModel,
     ) {
         flow<DbOperationState<Any>> {
             emit(DbOperationState.OperateState(true)) // 状态更新,现在处于操作数据的阶段
-            delay(10000) // 延迟10秒提交到数据库,模拟网络请求,测试异步
+            delay(2000) // 延迟10秒提交到数据库,模拟网络请求,测试异步
             emit(DbOperationState.InsertDataState(userInfoModel)) // 只用于打印数据
             userInfoHandler.insertUserInfo( // 数据插入数据库
                 userInfoModel
@@ -59,6 +59,10 @@ class RegisterViewModel(
                 println("Error on register")
             }
         }.launchIn(CoroutineScope(coroutineContext)) // 通过创建一个携程来运行flow
+    }
+
+    fun closeRegisterSuccessAlert() {
+        _uiState.value = _uiState.value.copy(showRegisterSuccessAlert = false)
     }
 
 }

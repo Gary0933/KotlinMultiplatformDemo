@@ -8,9 +8,11 @@ import androidx.navigation.compose.rememberNavController
 import di.appModule
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinApplication
+import org.koin.compose.koinInject
 import ui.navigation.AppNavigation
 import ui.screen.login.LoginScreen
 import ui.screen.login.register.RegisterScreen
+import ui.screen.login.view_model.LoginViewModel
 import ui.screen.main.MainNavConfiguration
 import ui.theme.DemoTheme
 
@@ -24,6 +26,7 @@ fun App() {
         DemoTheme{
 
             val navigator = rememberNavController()
+            val loginViewModel: LoginViewModel = koinInject()
 
             Box(modifier = Modifier.fillMaxSize()) {
                 NavHost(
@@ -34,6 +37,7 @@ fun App() {
                     // 定义登录页面的渲染方法
                     composable(route = AppNavigation.Login.route) {
                         LoginScreen(
+                            loginViewModel = loginViewModel,
                             navigateToMain = {
                                 navigator.navigate(AppNavigation.Main.route)
                             },
@@ -44,6 +48,7 @@ fun App() {
                     }
                     composable(route = AppNavigation.Register.route) {
                         RegisterScreen(
+                            loginViewModel = loginViewModel,
                             navigateToLogin = {
                                 navigator.popBackStack()
                             }
