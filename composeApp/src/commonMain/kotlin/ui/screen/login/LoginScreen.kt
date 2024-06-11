@@ -80,7 +80,7 @@ fun LoginScreen(
 
     LaunchedEffect(uiState.showRegisterSuccessAlert, showButtonLoading) {
         if (uiState.showRegisterSuccessAlert) {
-            loginViewModel.closeRegisterSuccessAlert(true)
+            loginViewModel.closeRegisterSuccessAlert()
         }
         if(showButtonLoading) {
             delay(1000)

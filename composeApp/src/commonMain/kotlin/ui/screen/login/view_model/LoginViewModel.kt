@@ -58,23 +58,9 @@ class LoginViewModel(
         }.launchIn(CoroutineScope(DB_COROUTINE_CONTEXT)) // 通过创建一个携程来运行flow
     }
 
-    suspend fun closeRegisterSuccessAlert(
-        fromLogin: Boolean = false
-    ) {
-        if (!fromLogin) {
-            delay(1500)
-            _uiState.value = _uiState.value.copy(registerSuccessAlertMessage = "Waiting back to login in 3 s ...")
-            delay(1000)
-            _uiState.value = _uiState.value.copy(registerSuccessAlertMessage = "Waiting back to login in 2 s ...")
-            delay(1000)
-            _uiState.value = _uiState.value.copy(registerSuccessAlertMessage = "Waiting back to login in 1 s ...")
-            delay(1000)
-            _uiState.value = _uiState.value.copy(showRegisterSuccessAlert = false)
-            _uiState.value = _uiState.value.copy(registerSuccessAlertMessage = "Register Successful")
-        } else {
-            delay(1500)
-            _uiState.value = _uiState.value.copy(showRegisterSuccessAlert = false)
-        }
+    suspend fun closeRegisterSuccessAlert() {
+        delay(1500)
+        _uiState.value = _uiState.value.copy(showRegisterSuccessAlert = false)
     }
 
 }
