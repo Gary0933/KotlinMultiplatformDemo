@@ -2,10 +2,9 @@ package database.entity
 
 import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
+import business.constants.DB_COROUTINE_CONTEXT
 import database.DbEngine
 import db.util.UserInfo
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.Flow
 import kotlin.coroutines.CoroutineContext
 
@@ -20,7 +19,7 @@ data class UserInfoModel(
 
 class UserInfoHandler(
     private var db: DbEngine,
-    private var coroutineContext: CoroutineContext = Dispatchers.IO
+    private var coroutineContext: CoroutineContext = DB_COROUTINE_CONTEXT
 ) {
     // 由于数据库的类型跟kotlin定义的类型有区别，需要转换
     private fun mapUserInfoList(

@@ -10,7 +10,7 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun ShowSnackBar(
-    title: String,
+    message: String,
     modifier: Modifier,
     snackBarVisibleState: Boolean
 ) {
@@ -21,7 +21,10 @@ fun ShowSnackBar(
             modifier = modifier.padding(16.dp),
             action = {}
         ) {
-            Text(text = title, style = MaterialTheme.typography.bodyMedium)
+            Text(
+                text = message,
+                style = MaterialTheme.typography.bodyMedium
+            )
         }
     }
 }

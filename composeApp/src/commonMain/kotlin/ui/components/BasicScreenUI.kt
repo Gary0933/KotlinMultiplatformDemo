@@ -61,7 +61,7 @@ fun BasicScreenUI(
 
             if (uiState != null) {
                 ShowSnackBar(
-                    title = uiState.registerSuccessAlertMessage,
+                    message = uiState.registerSuccessAlertMessage,
                     snackBarVisibleState = uiState.showRegisterSuccessAlert,
                     modifier = Modifier.align(Alignment.BottomCenter)
                 )

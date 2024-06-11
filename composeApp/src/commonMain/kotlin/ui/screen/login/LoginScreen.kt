@@ -49,7 +49,6 @@ import kotlinmultiplatformdemo.composeapp.generated.resources.ic_password_show
 import kotlinmultiplatformdemo.composeapp.generated.resources.sign_in
 import kotlinmultiplatformdemo.composeapp.generated.resources.sign_up
 import kotlinx.coroutines.delay
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import ui.components.BasicScreenUI
@@ -64,7 +63,6 @@ import ui.theme.IconColorGrey
 import ui.theme.PrimaryColor
 import ui.theme.placeholderGrey
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun LoginScreen(
     loginViewModel: LoginViewModel,
@@ -82,8 +80,7 @@ fun LoginScreen(
 
     LaunchedEffect(uiState.showRegisterSuccessAlert, showButtonLoading) {
         if (uiState.showRegisterSuccessAlert) {
-            delay(2000)
-            loginViewModel.closeRegisterSuccessAlert()
+            loginViewModel.closeRegisterSuccessAlert(true)
         }
         if(showButtonLoading) {
             delay(1000)

@@ -97,7 +97,6 @@ fun RegisterScreen(
 
     LaunchedEffect(uiState.showRegisterSuccessAlert) {
         if (uiState.showRegisterSuccessAlert) {
-            delay(2000)
             loginViewModel.closeRegisterSuccessAlert()
             navigateToLogin() // 注册成功的弹窗关闭后, 自动跳转到登录页面
         }

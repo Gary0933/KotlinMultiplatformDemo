@@ -38,13 +38,12 @@ fun ProfileShowUsersScreen(
     showUsersViewModel: ShowUsersViewModel = koinInject(),
     backOnTopBar: () -> Unit,
 ) {
-
-    LaunchedEffect(Unit) {
-        showUsersViewModel.getUsersData()
-    }
-
     // 获取用户实时的数据
     val userListState: List<UserInfoModel> by showUsersViewModel.userListState.collectAsState()
+
+    LaunchedEffect(Unit) {// 第一次进入页面后会查询一次所有的user信息
+        showUsersViewModel.getUsersData()
+    }
 
     BasicScreenUI(
         toolbarTitle = "Show Users",

@@ -1,14 +1,13 @@
 package ui.screen.login.view_model
 
 import androidx.lifecycle.ViewModel
+import business.constants.DB_COROUTINE_CONTEXT
 import business.data_state.DbOperationState
 import business.data_state.ManageUiState
 import database.DbEngine
 import database.entity.UserInfoHandler
 import database.entity.UserInfoModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,13 +15,11 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
-import kotlin.coroutines.CoroutineContext
 
 class LoginViewModel(
     db: DbEngine,
 ): ViewModel() {
 
-    private var coroutineContext: CoroutineContext = Dispatchers.IO
     private var userInfoHandler: UserInfoHandler = UserInfoHandler(db) // 操作userinfo表的数据
 
     private val _uiState = MutableStateFlow(ManageUiState())
@@ -58,11 +55,26 @@ class LoginViewModel(
             } else {
                 println("Error on register")
             }
-        }.launchIn(CoroutineScope(coroutineContext)) // 通过创建一个携程来运行flow
+        }.launchIn(CoroutineScope(DB_COROUTINE_CONTEXT)) // 通过创建一个携程来运行flow
     }
 
-    fun closeRegisterSuccessAlert() {
-        _uiState.value = _uiState.value.copy(showRegisterSuccessAlert = false)
+    suspend fun closeRegisterSuccessAlert(
+        fromLogin: Boolean = false
+    ) {
+        if (!fromLogin) {
+            delay(1500)
+            _uiState.value = _uiState.value.copy(registerSuccessAlertMessage = "Waiting back to login in 3 s ...")
+            delay(1000)
+            _uiState.value = _uiState.value.copy(registerSuccessAlertMessage = "Waiting back to login in 2 s ...")
+            delay(1000)
+            _uiState.value = _uiState.value.copy(registerSuccessAlertMessage = "Waiting back to login in 1 s ...")
+            delay(1000)
+            _uiState.value = _uiState.value.copy(showRegisterSuccessAlert = false)
+            _uiState.value = _uiState.value.copy(registerSuccessAlertMessage = "Register Successful")
+        } else {
+            delay(1500)
+            _uiState.value = _uiState.value.copy(showRegisterSuccessAlert = false)
+        }
     }
 
 }
