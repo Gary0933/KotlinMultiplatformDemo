@@ -11,14 +11,14 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun ShowSnackBar(
     message: String,
-    modifier: Modifier,
+    modifier: Modifier = Modifier.padding(16.dp),
     snackBarVisibleState: Boolean
 ) {
 
     if (snackBarVisibleState) {
         // Show the SnackBar
         Snackbar(
-            modifier = modifier.padding(16.dp),
+            modifier = modifier,
             action = {}
         ) {
             Text(

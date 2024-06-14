@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import ui.theme.BorderColor
 
@@ -46,32 +47,37 @@ fun CircleButton(
 
 @Composable
 fun TextWithLoadingInButton(
+    enable: Boolean = true,
     showLoading: Boolean,
+    loadingBarSize: Dp = 25.dp,
     content: @Composable () -> Unit,
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-    ) {
-        Box (
-            Modifier
-                .weight(1f),
-            contentAlignment = Alignment.CenterEnd
+    if (enable) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            LoadingBar(
-                showLoading = showLoading,
-                modifier = Modifier
-                    .size(25.dp),
-                strokeWidth = 2.dp,
-                color = MaterialTheme.colorScheme.background
-            )
+            Box (
+                Modifier
+                    .weight(1f),
+                contentAlignment = Alignment.CenterEnd
+            ) {
+                LoadingBar(
+                    showLoading = showLoading,
+                    modifier = Modifier
+                        .size(loadingBarSize),
+                    strokeWidth = 2.dp,
+                    color = MaterialTheme.colorScheme.background
+                )
+            }
+
+            content()
+
+            Spacer(Modifier.weight(1f))
         }
-
+    } else {
         content()
-
-        Spacer(Modifier.weight(1f))
     }
-
 }
