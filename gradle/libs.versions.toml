@@ -23,6 +23,7 @@ sqlDelight = "2.0.1"
 blankj-utilcode-ver = "1.30.7"
 kotlinx-coroutines-ver = "1.9.0-RC"
 stately-common-ver = "2.0.5"
+qr-code = "1.0.4"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -51,6 +52,7 @@ blankj-utilcode = { module = "com.blankj:utilcode", version.ref = "blankj-utilco
 kotlinx-coroutines-core = {module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines-ver"}
 kotlinx-coroutines-andriod = {module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines-ver"}
 stately-common = {module = "co.touchlab:stately-common", version.ref = "stately-common-ver"}
+qr-code = { module = "network.chaintech:qr-kit", version.ref = "qr-code" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

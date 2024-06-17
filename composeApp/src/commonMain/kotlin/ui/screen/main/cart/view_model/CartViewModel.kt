@@ -37,8 +37,11 @@ class CartViewModel(): ViewModel() {
         }
     }
 
-    fun updateProjectId(productId: String) {
-        _addCartDataState.value.productId = productId
+    fun updateProductId(productId: String) {
+        val currentState = _addCartDataState.value
+        _addCartDataState.value = currentState.copy(
+            productId = productId
+        )
     }
 
     fun updateProductType(productType: String) {

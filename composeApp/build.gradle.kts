@@ -48,6 +48,7 @@ kotlin {
             implementation(libs.sqldelight.runtime) // SQLDelight
             implementation(libs.sqldelight.coroutines) // SQLDelight
             implementation(libs.kotlinx.coroutines.core) // 携程支持
+            implementation(libs.qr.code) // qr 扫描
         }
 
         androidMain.dependencies {
