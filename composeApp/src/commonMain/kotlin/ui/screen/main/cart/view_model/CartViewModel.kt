@@ -37,4 +37,42 @@ class CartViewModel(): ViewModel() {
         }
     }
 
+    fun updateProjectId(productId: String) {
+        _addCartDataState.value.productId = productId
+    }
+
+    fun updateProductType(productType: String) {
+        val currentState = _addCartDataState.value
+        _addCartDataState.value = currentState.copy(
+            productType = productType
+        )
+    }
+
+    fun deleteProductItem(productItem: String) {
+        val currentState = _addCartDataState.value
+        val newItemList = currentState.productItem.toMutableList().apply {
+            remove(productItem)
+        }
+        _addCartDataState.value = currentState.copy(productItem = newItemList)
+    }
+
+    fun updateProductItem(index: Int, productItem: String) {
+        val currentState = _addCartDataState.value
+        if (index in currentState.productItem.indices) { // 确保索引在列表范围内
+            val updatedItemList = currentState.productItem.toMutableList().apply {
+                this[index] = productItem // 通过索引更新列表中的产品
+            }
+            _addCartDataState.value = currentState.copy(productItem = updatedItemList)
+        }
+    }
+
+    fun addProductItem(productItem: String) {
+        val currentState = _addCartDataState.value
+        _addCartDataState.value = currentState.copy(
+            productItem = currentState.productItem.toMutableList().apply {
+                add(productItem)
+            }
+        )
+    }
+
 }

@@ -5,6 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
@@ -19,14 +20,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
+import ui.theme.DeletedColor
+import ui.theme.PrimaryColor
 
 
 data class SwipeConfiguration (
     var swipeToLeft: Boolean = false,
     var swipeToRight: Boolean = false,
-    var swipeToLeftColor: Color = Color.Red,
+    var swipeToLeftColor: Color = DeletedColor,
     var swipeToRightColor: Color = Color.Green,
-    var swipeDurationColor: Color = Color.LightGray,
+    var swipeDurationColor: Color = PrimaryColor,
     var swipeToLeftIcon: ImageVector = Icons.Default.Delete,
     var swipeToRightIcon: ImageVector = Icons.Default.Add,
 )
@@ -92,13 +96,13 @@ fun SwipeToDismissComponent(
                     Icon(
                         swipeConfiguration.swipeToLeftIcon,
                         contentDescription = "",
-                        modifier = Modifier
+                        modifier = Modifier.padding(horizontal = 20.dp)
                     )
                 } else {
                     Icon(
                         swipeConfiguration.swipeToRightIcon,
                         contentDescription = "",
-                        modifier = Modifier
+                        modifier = Modifier.padding(horizontal = 20.dp)
                     )
                 }
             }
