@@ -16,8 +16,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import business.data_state.ManageUiState
+import ui.theme.backgroundLightGrey
 
 @Composable
 fun BasicScreenUI(
@@ -25,6 +27,7 @@ fun BasicScreenUI(
     uiState: ManageUiState? = null,
     toolbarTitle: String? = null,
     backOnTopBarOnClick: () -> Unit = {},
+    backGroundColor: Color = backgroundLightGrey,
     content: @Composable () -> Unit,
 ) {
     Scaffold(
@@ -52,9 +55,10 @@ fun BasicScreenUI(
         }
     ) {
         Box(
-            modifier = Modifier.padding(top = it.calculateTopPadding())
+            modifier = Modifier
+                .padding(top = it.calculateTopPadding())
                 .fillMaxSize()
-                .background(MaterialTheme.colorScheme.background),
+                .background(backGroundColor),
             contentAlignment = Alignment.Center
         ) {
             content()

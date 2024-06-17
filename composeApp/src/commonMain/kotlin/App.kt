@@ -31,7 +31,8 @@ fun App() {
             Box(modifier = Modifier.fillMaxSize()) {
                 NavHost(
                     navController = navigator,
-                    startDestination = AppNavigation.Login.route, // 定义初始页面是登录页面
+                    //startDestination = AppNavigation.Login.route, // 定义初始页面是登录页面
+                    startDestination = AppNavigation.Main.route,
                     modifier = Modifier.fillMaxSize()
                 ) {
                     // 定义登录页面的渲染方法

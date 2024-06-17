@@ -14,7 +14,10 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -26,6 +29,7 @@ import androidx.navigation.compose.rememberNavController
 import common.ChangeStatusBarColors
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.koinInject
 import ui.navigation.MainNavigation
 import ui.screen.main.cart.CartNavConfiguration
 import ui.screen.main.favorite.FavoriteNavConfiguration
@@ -34,13 +38,20 @@ import ui.screen.main.profile.ProfileNavConfiguration
 import ui.theme.DefaultNavigationBarItemTheme
 
 @Composable
-fun MainNavConfiguration(logout: () -> Unit) {
+fun MainNavConfiguration(
+    mainViewModel: MainViewModel = koinInject(),
+    logout: () -> Unit
+) {
     val navBottomBarController = rememberNavController()
+    val isBottomBarVisible by mainViewModel.isBottomBarVisible.collectAsState()
 
     ChangeStatusBarColors(Color.White) // 修改样式不支持跨平台，需要在各自的平台里实现(composeApp里各种模块的common文件夹下)
 
     Scaffold(bottomBar = {
-        BottomNavigationUI(navController = navBottomBarController)
+        if (isBottomBarVisible) {
+            BottomNavigationUI(navController = navBottomBarController)
+        }
+
     }) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             NavHost(
@@ -49,15 +60,21 @@ fun MainNavConfiguration(logout: () -> Unit) {
                 modifier = Modifier.fillMaxSize()
             ) {
                 composable(route = MainNavigation.Home.route) {
+                    mainViewModel.hideBottomBar(false)
                     HomeNavConfiguration()
                 }
                 composable(route = MainNavigation.Favorite.route) {
+                    mainViewModel.hideBottomBar(false)
                     FavoriteNavConfiguration()
                 }
                 composable(route = MainNavigation.Cart.route) {
-                    CartNavConfiguration()
+                    mainViewModel.hideBottomBar(false)
+                    CartNavConfiguration(
+                        mainViewModel = mainViewModel
+                    )
                 }
                 composable(route = MainNavigation.Profile.route) {
+                    mainViewModel.hideBottomBar(false)
                     ProfileNavConfiguration(
                         logout = logout
                     )
