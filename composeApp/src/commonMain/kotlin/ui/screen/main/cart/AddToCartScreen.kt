@@ -93,7 +93,7 @@ fun AddToCartScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(30.dp)
+                .padding(horizontal = 10.dp)
         ) {
 
             LazyColumn(
@@ -106,6 +106,8 @@ fun AddToCartScreen(
 
                 // product id
                 item {
+                    Spacer(modifier = Modifier.height(8.dp))
+
                     itemCard {
                         cardWithSelectedOption {
                             Column(
@@ -424,7 +426,7 @@ fun AddToCartScreen(
 
             // submit
             Column(
-                modifier = Modifier.padding(horizontal = 22.dp, vertical = 10.dp),
+                modifier = Modifier.padding(horizontal = 10.dp, vertical = 20.dp),
                 verticalArrangement = Arrangement.Bottom,
             ) {
                 Button(
@@ -464,7 +466,7 @@ fun itemCard(
         modifier = Modifier
             .fillMaxWidth()
             .height(100.dp)
-            .padding(12.dp),
+            .padding(10.dp),
         elevation = CardDefaults.cardElevation(10.dp),
         shape = myShapes.small
     ) {
