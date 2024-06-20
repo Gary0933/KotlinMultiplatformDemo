@@ -28,6 +28,7 @@ fun BasicScreenUI(
     toolbarTitle: String? = null,
     backOnTopBarOnClick: () -> Unit = {},
     backGroundColor: Color = backgroundLightGrey,
+    contentAlignment: Alignment = Alignment.Center,
     content: @Composable () -> Unit,
 ) {
     Scaffold(
@@ -59,7 +60,7 @@ fun BasicScreenUI(
                 .padding(top = it.calculateTopPadding())
                 .fillMaxSize()
                 .background(backGroundColor),
-            contentAlignment = Alignment.Center
+            contentAlignment = contentAlignment
         ) {
             content()
 

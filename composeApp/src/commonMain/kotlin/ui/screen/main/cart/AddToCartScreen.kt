@@ -27,6 +27,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -46,6 +47,7 @@ import kotlinmultiplatformdemo.composeapp.generated.resources.add
 import kotlinmultiplatformdemo.composeapp.generated.resources.expend
 import kotlinmultiplatformdemo.composeapp.generated.resources.scan_barcode
 import kotlinmultiplatformdemo.composeapp.generated.resources.shrink
+import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
 import ui.components.BasicScreenUI
 import ui.components.SwipeConfiguration
@@ -61,17 +63,32 @@ fun AddToCartScreen(
     cartViewModel: CartViewModel,
     navigateToCart: () -> Unit,
     navigateToScanner: () -> Unit,
-    backOnTopBar: () -> Unit,
 ) {
 
     BasicScreenUI(
         toolbarTitle = "Add To Cart",
-        backOnTopBarOnClick = backOnTopBar
+        backOnTopBarOnClick = navigateToCart
     ) {
-
         val addCartDataState by cartViewModel.addCartDataState.collectAsState()
         var showLoading by rememberSaveable { mutableStateOf(false) }
         var selectedOptionText by remember { mutableStateOf("New Item") }
+
+        if (addCartDataState.productType.isEmpty()) {
+            cartViewModel.updateProductType(productTypeOptions[0])
+        }
+
+        if (addCartDataState.productItemList.isEmpty()) {
+            cartViewModel.addProductItem(productItemOptions[0])
+        }
+
+        LaunchedEffect(showLoading) {// 实时监测这两个对象，如果有变换，立即执行里面的代码
+            if (showLoading) {
+                delay(1000)
+                showLoading = false
+                cartViewModel.updateDeliveryItemList()
+                navigateToCart()
+            }
+        }
 
         Column(
             modifier = Modifier
@@ -90,9 +107,7 @@ fun AddToCartScreen(
                 // product id
                 item {
                     itemCard {
-                        cardWithSelectedOption(
-                            withSelectedOption = false
-                        ) {
+                        cardWithSelectedOption {
                             Column(
                                 modifier = Modifier.fillMaxHeight(),
                                 verticalArrangement = Arrangement.Center
@@ -124,64 +139,134 @@ fun AddToCartScreen(
                 // Product type
                 item {
                     itemCard {
-                        cardWithSelectedOption(
-                            selectedOptions = productTypeOptions,
-                            dataUpdate = {dataIndex, selectedOption ->
-                                cartViewModel.updateProductType(selectedOption)
-                            }
-                        ) {
-                            Column(
-                                modifier = Modifier.fillMaxHeight(),
-                                verticalArrangement = Arrangement.Center
+                        cardWithSelectedOption {
+                            val expanded = remember { mutableStateOf(false) }
+                            Box(
+                                contentAlignment = Alignment.CenterStart,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .noRippleClickable {
+                                        expanded.value = !expanded.value
+                                    },
                             ) {
-                                Text(
-                                    text = "Type",
-                                    fontWeight = FontWeight.Medium,
-                                    fontSize = 15.sp,
-                                    color = Color.Gray
+                                Column(
+                                    modifier = Modifier.fillMaxHeight(),
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    Text(
+                                        text = "Type",
+                                        fontWeight = FontWeight.Medium,
+                                        fontSize = 15.sp,
+                                        color = Color.Gray
+                                    )
+                                    Spacer(modifier = Modifier.size(5.dp))
+                                    Text(
+                                        text = addCartDataState.productType,
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 18.sp,
+                                    )
+                                }
+                                Icon(
+                                    painter = if (expanded.value) {
+                                        painterResource(Res.drawable.shrink)
+                                    } else {
+                                        painterResource(Res.drawable.expend)
+                                    },
+                                    contentDescription = "Icon",
+                                    Modifier.align(Alignment.CenterEnd)
                                 )
-                                Spacer(modifier = Modifier.size(5.dp))
-                                Text(
-                                    text = addCartDataState.productType,
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 18.sp,
-                                )
+                                DropdownMenu(
+                                    expanded = expanded.value,
+                                    onDismissRequest = { expanded.value = false }
+                                ) {
+                                    productTypeOptions.forEach { selectedOption ->
+                                        DropdownMenuItem(
+                                            onClick = {
+                                                // 选择选项
+                                                cartViewModel.updateProductType(selectedOption)
+                                                expanded.value = false
+                                            },
+                                            modifier = Modifier.fillMaxWidth(),
+                                            text = { Text(selectedOption) }
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
                 }
 
                 // Product items
-                itemsIndexed (addCartDataState.productItem) { index, value ->
-                    val isFirstItem = index == 0
+                itemsIndexed (
+                    addCartDataState.productItemList,
+                    /**
+                     * Compose默认会使用index的索引作为键, 当你使用key参数时，你正在为列表中的每个项目指定一个唯一的标识符
+                     * 此时Compose会使用你设置的key来作为键，当列表数据发生变化后(增删改),根据键来处理如何更新列表
+                     * 这里不使用index作为键的原因是,index会随着某一个数据的删除或修改导致整个列表的index发生错乱，页面根据index重载会出问题
+                     */
+                    /**
+                     * Compose默认会使用index的索引作为键, 当你使用key参数时，你正在为列表中的每个项目指定一个唯一的标识符
+                     * 此时Compose会使用你设置的key来作为键，当列表数据发生变化后(增删改),根据键来处理如何更新列表
+                     * 这里不使用index作为键的原因是,index会随着某一个数据的删除或修改导致整个列表的index发生错乱，页面根据index重载会出问题
+                     */
+                    key = { index, value -> value.itemId }
+                ) { index, value ->
                     itemCard {
-                        if (false) {
-                            cardWithSelectedOption(
-                                currentDataIndex = index,
-                                selectedOptions = productItemOptions,
-                                dataUpdate = {dataIndex, selectedOption ->
-                                    cartViewModel.updateProductItem(dataIndex, selectedOption)
-                                }
-                            ) {
-                                Column(
-                                    modifier = Modifier.fillMaxHeight(),
-                                    verticalArrangement = Arrangement.Center
+                        if (value.itemId == 0) {
+                            cardWithSelectedOption {
+                                val expanded = remember { mutableStateOf(false) }
+                                Box(
+                                    contentAlignment = Alignment.CenterStart,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .noRippleClickable {
+                                            expanded.value = !expanded.value
+                                        },
                                 ) {
-                                    if (index == 0) {
+                                    Column(
+                                        modifier = Modifier.fillMaxHeight(),
+                                        verticalArrangement = Arrangement.Center
+                                    ) {
+                                        if (value.itemId == 0) {
+                                            Text(
+                                                text = "Item",
+                                                fontWeight = FontWeight.Medium,
+                                                fontSize = 15.sp,
+                                                color = Color.Gray
+                                            )
+                                        }
+                                        Spacer(modifier = Modifier.size(5.dp))
                                         Text(
-                                            text = "Item",
-                                            fontWeight = FontWeight.Medium,
-                                            fontSize = 15.sp,
-                                            color = Color.Gray
+                                            text = value.itemText,
+                                            fontWeight = FontWeight.Bold,
+                                            fontSize = 18.sp,
                                         )
                                     }
-
-                                    Spacer(modifier = Modifier.size(5.dp))
-                                    Text(
-                                        text = value,
-                                        fontWeight = FontWeight.Bold,
-                                        fontSize = 18.sp,
+                                    Icon(
+                                        painter = if (expanded.value) {
+                                            painterResource(Res.drawable.shrink)
+                                        } else {
+                                            painterResource(Res.drawable.expend)
+                                        },
+                                        contentDescription = "Icon",
+                                        Modifier.align(Alignment.CenterEnd)
                                     )
+                                    DropdownMenu(
+                                        expanded = expanded.value,
+                                        onDismissRequest = { expanded.value = false }
+                                    ) {
+                                        productItemOptions.forEach { selectedOption ->
+                                            DropdownMenuItem(
+                                                onClick = {
+                                                    // 选择选项
+                                                    cartViewModel.updateProductItem(value.itemId, selectedOption)
+                                                    expanded.value = false
+                                                },
+                                                modifier = Modifier.fillMaxWidth(),
+                                                text = { Text(selectedOption) }
+                                            )
+                                        }
+                                    }
                                 }
                             }
                         } else {
@@ -193,35 +278,63 @@ fun AddToCartScreen(
                                     swipeToLeft = true
                                 ),
                                 swipeToLeftAction = {
-                                    cartViewModel.deleteProductItem(value)
+                                    cartViewModel.deleteProductItem(value.itemId)
                                 },
                                 content = {
-                                    cardWithSelectedOption(
-                                        currentDataIndex = index,
-                                        selectedOptions = productItemOptions,
-                                        dataUpdate = {dataIndex, selectedOption ->
-                                            cartViewModel.updateProductItem(dataIndex, selectedOption)
-                                        }
-                                    ) {
-                                        Column(
-                                            modifier = Modifier.fillMaxHeight(),
-                                            verticalArrangement = Arrangement.Center
+                                    cardWithSelectedOption {
+                                        val expanded = remember { mutableStateOf(false) }
+                                        Box(
+                                            contentAlignment = Alignment.CenterStart,
+                                            modifier = Modifier
+                                                .fillMaxWidth()
+                                                .noRippleClickable {
+                                                    expanded.value = !expanded.value
+                                                },
                                         ) {
-                                            if (index == 0) {
+                                            Column(
+                                                modifier = Modifier.fillMaxHeight(),
+                                                verticalArrangement = Arrangement.Center
+                                            ) {
+                                                if (index == 0) {
+                                                    Text(
+                                                        text = "Item",
+                                                        fontWeight = FontWeight.Medium,
+                                                        fontSize = 15.sp,
+                                                        color = Color.Gray
+                                                    )
+                                                }
+                                                Spacer(modifier = Modifier.size(5.dp))
                                                 Text(
-                                                    text = "Item",
-                                                    fontWeight = FontWeight.Medium,
-                                                    fontSize = 15.sp,
-                                                    color = Color.Gray
+                                                    text = value.itemText,
+                                                    fontWeight = FontWeight.Bold,
+                                                    fontSize = 18.sp,
                                                 )
                                             }
-
-                                            Spacer(modifier = Modifier.size(5.dp))
-                                            Text(
-                                                text = value,
-                                                fontWeight = FontWeight.Bold,
-                                                fontSize = 18.sp,
+                                            Icon(
+                                                painter = if (expanded.value) {
+                                                    painterResource(Res.drawable.shrink)
+                                                } else {
+                                                    painterResource(Res.drawable.expend)
+                                                },
+                                                contentDescription = "Icon",
+                                                Modifier.align(Alignment.CenterEnd)
                                             )
+                                            DropdownMenu(
+                                                expanded = expanded.value,
+                                                onDismissRequest = { expanded.value = false }
+                                            ) {
+                                                productItemOptions.forEach { selectedOption ->
+                                                    DropdownMenuItem(
+                                                        onClick = {
+                                                            // 选择选项
+                                                            cartViewModel.updateProductItem(value.itemId, selectedOption)
+                                                            expanded.value = false
+                                                        },
+                                                        modifier = Modifier.fillMaxWidth(),
+                                                        text = { Text(selectedOption) }
+                                                    )
+                                                }
+                                            }
                                         }
                                     }
                                 }
@@ -233,26 +346,56 @@ fun AddToCartScreen(
                 // add product item
                 item {
                     itemCard {
-                        cardWithSelectedOption(
-                            selectedOptions = productItemOptions,
-                            dataUpdate = {dataIndex, selectedOption ->
-                                selectedOptionText = selectedOption
-                            }
-                        ) {
-                            Column(
-                                modifier = Modifier.fillMaxHeight(),
-                                verticalArrangement = Arrangement.Center
+                        cardWithSelectedOption {
+                            val expanded = remember { mutableStateOf(false) }
+                            Box(
+                                contentAlignment = Alignment.CenterStart,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .noRippleClickable {
+                                        expanded.value = !expanded.value
+                                    },
                             ) {
-                                Text(
-                                    text = selectedOptionText,
-                                    fontWeight = FontWeight.Bold,
-                                    fontSize = 18.sp,
+                                Column(
+                                    modifier = Modifier.fillMaxHeight(),
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    Text(
+                                        text = selectedOptionText,
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 18.sp,
+                                    )
+                                }
+                                Icon(
+                                    painter = if (expanded.value) {
+                                        painterResource(Res.drawable.shrink)
+                                    } else {
+                                        painterResource(Res.drawable.expend)
+                                    },
+                                    contentDescription = "Icon",
+                                    Modifier.align(Alignment.CenterEnd)
                                 )
+                                DropdownMenu(
+                                    expanded = expanded.value,
+                                    onDismissRequest = { expanded.value = false }
+                                ) {
+                                    productItemOptions.forEach { selectedOption ->
+                                        DropdownMenuItem(
+                                            onClick = {
+                                                // 选择选项
+                                                selectedOptionText = selectedOption
+                                                expanded.value = false
+                                            },
+                                            modifier = Modifier.fillMaxWidth(),
+                                            text = { Text(selectedOption) }
+                                        )
+                                    }
+                                }
                             }
                         }
                     }
 
-                    Row (){
+                    Row {
                         Spacer(modifier = Modifier.height(15.dp))
                         Icon(
                             painterResource(Res.drawable.add),
@@ -295,7 +438,6 @@ fun AddToCartScreen(
                     onClick = {
                         if (addCartDataState.productId.isNotEmpty()) {
                             showLoading = true
-                            navigateToCart()
                         }
                     }
                 ) {
@@ -332,13 +474,6 @@ fun itemCard(
 
 @Composable
 fun cardWithSelectedOption(
-    withSelectedOption: Boolean = true,
-    selectedOptions: List<String> = emptyList(),
-    dataUpdate: (
-        dataIndex: Int,
-        selectedOption: String
-    ) -> Unit = {_, _ ->},
-    currentDataIndex: Int = 0,
     content: @Composable () -> Unit,
 ) {
     val expanded = remember { mutableStateOf(false) }
@@ -354,48 +489,7 @@ fun cardWithSelectedOption(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        if (!withSelectedOption) {
-            content()
-        } else {
-            Box(
-                contentAlignment = Alignment.CenterStart,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .noRippleClickable {
-                        expanded.value = !expanded.value
-                    },
-            ) {
-                content()
-
-                Icon(
-                    painter = if (expanded.value) {
-                        painterResource(Res.drawable.shrink)
-                    } else {
-                        painterResource(Res.drawable.expend)
-                    },
-                    contentDescription = "Icon",
-                    Modifier.align(Alignment.CenterEnd)
-                )
-
-                DropdownMenu(
-                    expanded = expanded.value,
-                    onDismissRequest = { expanded.value = false }
-                ) {
-                    selectedOptions.forEach { selectedOption ->
-                        DropdownMenuItem(
-                            onClick = {
-                                // 选择选项
-                                dataUpdate(currentDataIndex, selectedOption)
-                                expanded.value = false
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                            text = { Text(selectedOption) }
-                        )
-                    }
-                }
-            }
-        }
-
+        content()
     }
 }
 

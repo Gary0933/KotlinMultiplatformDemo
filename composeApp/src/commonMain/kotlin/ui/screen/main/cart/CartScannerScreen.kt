@@ -18,6 +18,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,6 +32,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinmultiplatformdemo.composeapp.generated.resources.Res
 import kotlinmultiplatformdemo.composeapp.generated.resources.back_3
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import qrscanner.QrScanner
@@ -53,8 +55,18 @@ fun CartScannerScreen(
 
     BasicScreenUI(
         showTopBar = false,
+        contentAlignment = Alignment.TopCenter,
         backGroundColor = QrScannerBackground
     ) {
+
+        LaunchedEffect(scannerBorderColor) {
+            if (scannerBorderColor == Color.Green) {
+                cartViewModel.updateProductId(productId)
+                delay(1000)
+                navigateToAddToCart()
+            }
+        }
+
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -146,7 +158,6 @@ fun CartScannerScreen(
                         }
                     )
                 }
-
                 Column (
                     modifier = Modifier
                         .fillMaxWidth()
@@ -155,7 +166,6 @@ fun CartScannerScreen(
                 ) {
                     Text("Touch to confirm")
                 }
-
             }
         }
     }

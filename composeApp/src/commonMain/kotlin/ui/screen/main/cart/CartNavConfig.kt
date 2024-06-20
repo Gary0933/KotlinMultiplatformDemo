@@ -41,9 +41,6 @@ fun CartNavConfiguration(
                 },
                 navigateToScanner = {
                     navigator.navigate(CartNavigation.CartScanner.route)
-                },
-                backOnTopBar = {
-                    navigator.popBackStack()
                 }
             )
         }

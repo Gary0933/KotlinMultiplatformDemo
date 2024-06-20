@@ -40,6 +40,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import business.data_state.CartState
+import business.data_state.ItemData
 import ui.components.BasicScreenUI
 import ui.screen.main.cart.view_model.CartViewModel
 import ui.theme.DeletedColor
@@ -205,7 +206,9 @@ fun showCartItem(
                 Spacer(modifier = Modifier.size(5.dp))
                 Text(cartItemData.productType)
                 Spacer(modifier = Modifier.size(5.dp))
-                Text(cartItemData.productItem.joinToString(", "))
+                Text(
+                    text = setAllItemValueToString(cartItemData.productItemList)
+                )
             }
             Box(
                 modifier = Modifier
@@ -231,4 +234,15 @@ fun showCartItem(
         }
     }
     Spacer(modifier = Modifier.size(10.dp))
+}
+
+
+fun setAllItemValueToString(productItemList: MutableList<ItemData>): String {
+    val mutableList: MutableList<String> = mutableListOf()
+    productItemList.forEach { item ->
+        mutableList.add(
+            item.itemText
+        )
+    }
+    return mutableList.joinToString(",")
 }
