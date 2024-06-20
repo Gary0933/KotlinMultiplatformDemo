@@ -214,7 +214,7 @@ fun AddToCartScreen(
                     key = { index, value -> value.itemId }
                 ) { index, value ->
                     itemCard {
-                        if (value.itemId == 0) {
+                        if (addCartDataState.productItemList.size <= 1) {
                             cardWithSelectedOption {
                                 val expanded = remember { mutableStateOf(false) }
                                 Box(
@@ -229,7 +229,7 @@ fun AddToCartScreen(
                                         modifier = Modifier.fillMaxHeight(),
                                         verticalArrangement = Arrangement.Center
                                     ) {
-                                        if (value.itemId == 0) {
+                                        if (index == 0) {
                                             Text(
                                                 text = "Item",
                                                 fontWeight = FontWeight.Medium,
