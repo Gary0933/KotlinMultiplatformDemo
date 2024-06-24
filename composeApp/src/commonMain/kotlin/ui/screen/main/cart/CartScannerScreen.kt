@@ -30,12 +30,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import common.QrScannerComponent
 import kotlinmultiplatformdemo.composeapp.generated.resources.Res
 import kotlinmultiplatformdemo.composeapp.generated.resources.back_3
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
-import qrscanner.QrScanner
 import ui.components.BasicScreenUI
 import ui.screen.main.cart.view_model.CartViewModel
 import ui.theme.PrimaryColor
@@ -136,7 +136,7 @@ fun CartScannerScreen(
                         },
                     contentAlignment = Alignment.Center
                 ) {
-                    QrScanner(
+                    QrScannerComponent(
                         modifier = Modifier
                             .clipToBounds()
                             .clip(shape = RoundedCornerShape(size = 14.dp)),

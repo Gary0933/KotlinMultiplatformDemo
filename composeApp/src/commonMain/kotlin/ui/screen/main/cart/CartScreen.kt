@@ -244,5 +244,5 @@ fun setAllItemValueToString(productItemList: MutableList<ItemData>): String {
             item.itemText
         )
     }
-    return mutableList.joinToString(",")
+    return mutableList.joinToString(", ")
 }

@@ -48,7 +48,6 @@ kotlin {
             implementation(libs.sqldelight.runtime) // SQLDelight
             implementation(libs.sqldelight.coroutines) // SQLDelight
             implementation(libs.kotlinx.coroutines.core) // 携程支持
-            implementation(libs.qr.code) // qr 扫描
         }
 
         androidMain.dependencies {
@@ -59,12 +58,13 @@ kotlin {
             implementation(libs.sqldelight.android.driver) // SQLDelight
             api(libs.blankj.utilcode) // 获取android context用的到
             implementation(libs.kotlinx.coroutines.andriod) // 携程支持
-
+            implementation(libs.qr.code) // qr 扫描
         }
 
         iosMain.dependencies {
             implementation(libs.sqldelight.native.driver) // SQLDelight
             implementation(libs.stately.common) // 修复SQLDelight在IOS编译时报错 Could not find "co.touchlab:stately-common"
+            implementation(libs.qr.code) // qr 扫描
         }
 
         desktopMain.dependencies {
