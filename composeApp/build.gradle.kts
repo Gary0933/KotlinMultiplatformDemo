@@ -48,6 +48,11 @@ kotlin {
             implementation(libs.sqldelight.runtime) // SQLDelight
             implementation(libs.sqldelight.coroutines) // SQLDelight
             implementation(libs.kotlinx.coroutines.core) // 携程支持
+            // storage数据存储
+            implementation(libs.multiplatform.settings)
+            implementation(libs.multiplatform.settings.no.arg)
+            implementation(libs.multiplatform.settings.coroutines)
+            implementation(libs.multiplatform.settings.datastore)
         }
 
         androidMain.dependencies {

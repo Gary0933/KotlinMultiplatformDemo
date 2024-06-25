@@ -4,6 +4,7 @@ import app.cash.sqldelight.coroutines.asFlow
 import app.cash.sqldelight.coroutines.mapToList
 import business.constants.DB_COROUTINE_CONTEXT
 import database.DbEngine
+import db.util.GetLoginStatusById
 import db.util.UserInfo
 import kotlinx.coroutines.flow.Flow
 import kotlin.coroutines.CoroutineContext
@@ -11,9 +12,10 @@ import kotlin.coroutines.CoroutineContext
 
 data class UserInfoModel(
     val Id: Int = 0,
-    val UserName: String,
-    val UserEmail: String,
-    val UserPassword: String,
+    val UserName: String = "",
+    val UserEmail: String = "",
+    val UserPassword: String = "",
+    val IsLogin: Int = 0,
     val CreateDate: String? = null // 可以为空
 )
 
@@ -27,6 +29,7 @@ class UserInfoHandler(
         UserName: String,
         UserEmail: String,
         UserPassword: String,
+        IsLogin: Long?,
         CreateDate: String?,
     ): UserInfoModel {
         return UserInfoModel(
@@ -34,6 +37,7 @@ class UserInfoHandler(
             UserName = UserName,
             UserEmail = UserEmail,
             UserPassword = UserPassword,
+            IsLogin = IsLogin?.toInt() ?: 0,
             CreateDate = CreateDate ?: ""
         )
     }
@@ -75,6 +79,7 @@ class UserInfoHandler(
                         UserName,
                         UserEmail,
                         UserPassword,
+                        IsLogin.toLong(),
                         CreateDate
                     )
                 )
@@ -82,16 +87,55 @@ class UserInfoHandler(
         }
     }
 
-    internal fun deleteUserInfo(
-        userInfoModel: UserInfoModel?
-    ) {
+    internal fun deleteUserInfo(userId: Int?) {
         db.dbQuery.transaction {
-            if (userInfoModel == null) {
+            if (userId == null) {
                 db.dbQuery.deleteAllUserInfo()
             } else {
-                db.dbQuery.deleteUserInfoById(userInfoModel.Id.toLong())
+                db.dbQuery.deleteUserInfoById(userId.toLong())
             }
         }
+    }
+
+    internal fun updateLoginStatus(isLogin: Int, userId: Int) {
+        db.dbQuery.transaction {
+            db.dbQuery.updateLoginStatus(
+                isLogin.toLong(),
+                userId.toLong()
+            )
+        }
+    }
+
+    internal fun checkLoginStatus(
+        userInfoModel: UserInfoModel
+    ): Int {
+        val result: GetLoginStatusById? = db.dbQuery.getLoginStatusById(userInfoModel.Id.toLong()).executeAsOneOrNull()
+        return if (result == null) {
+            0
+        } else {
+            result.IsLogin?.toInt() ?: 0
+        }
+    }
+
+    internal fun isExistUserEmail(userEmail: String): Boolean {
+        val result: UserInfo? = db.dbQuery.getUserInfoByEmail(userEmail).executeAsOneOrNull()
+        return result != null
+    }
+
+    internal fun validateUserInfo(
+        userEmail: String,
+        userPassword: String
+    ): Int{
+        val result: UserInfo? = db.dbQuery.validateUserInfo(
+            userEmail,
+            userPassword
+        ).executeAsOneOrNull()
+
+        return result?.Id?.toInt() ?: 0
+    }
+
+    internal fun getLoginUser(): UserInfoModel? {
+        return db.dbQuery.getLoginUser(::mapUserInfoList).executeAsOneOrNull()
     }
 }
 

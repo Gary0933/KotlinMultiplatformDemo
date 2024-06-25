@@ -4,6 +4,7 @@ CREATE TABLE UserInfo (
     UserName TEXT NOT NULL,
     UserEmail TEXT NOT NULL,
     UserPassword TEXT NOT NULL,
+    IsLogin INTEGER,
     CreateDate TEXT
 );
 
@@ -13,14 +14,29 @@ SELECT * FROM UserInfo;
 getUserInfoById:
 SELECT * FROM UserInfo WHERE Id == ?;
 
+getUserInfoByEmail:
+SELECT * FROM UserInfo WHERE UserEmail == ?;
+
+validateUserInfo:
+SELECT * FROM UserInfo WHERE UserEmail == ? AND UserPassword == ?;
+
 insertUserInfo:
 INSERT INTO UserInfo(UserName, UserEmail, UserPassword)
 VALUES ?;
+
+updateLoginStatus:
+UPDATE UserInfo SET IsLogin = ? WHERE Id == ?;
+
+getLoginStatusById:
+SELECT IsLogin FROM UserInfo WHERE Id == ?;
 
 deleteAllUserInfo:
 DELETE FROM UserInfo;
 
 deleteUserInfoById:
 DELETE FROM UserInfo WHERE Id == ?;
+
+getLoginUser:
+SELECT * FROM UserInfo WHERE IsLogin == 1;
 
 

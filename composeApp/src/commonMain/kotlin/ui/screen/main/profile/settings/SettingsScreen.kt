@@ -17,19 +17,21 @@ import androidx.compose.ui.unit.dp
 import kotlinmultiplatformdemo.composeapp.generated.resources.Res
 import kotlinmultiplatformdemo.composeapp.generated.resources.arrow_right
 import kotlinmultiplatformdemo.composeapp.generated.resources.exit
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.koinInject
+import storage.dataStorage
 import ui.components.BasicScreenUI
 import ui.components.Spacer_32dp
 import ui.components.Spacer_8dp
 import ui.components.noRippleClickable
+import ui.screen.main.profile.settings.view_model.SettingViewModel
 import ui.theme.BorderColor
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun ProfileSettingsScreen(
+    settingViewModel: SettingViewModel = koinInject(),
     backOnTopBar: () -> Unit,
-    logout: () -> Unit
+    backToLogin: () -> Unit
 ) {
     BasicScreenUI(
         toolbarTitle = "Settings",
@@ -44,7 +46,9 @@ fun ProfileSettingsScreen(
                     .fillMaxWidth()
                     .padding(vertical = 16.dp)
                     .noRippleClickable {
-                        logout()
+                        dataStorage.putBoolean("loginSuccess", false)
+                        settingViewModel.logout()
+                        backToLogin()
                     },
                 verticalAlignment = Alignment.CenterVertically) {
                 Icon(

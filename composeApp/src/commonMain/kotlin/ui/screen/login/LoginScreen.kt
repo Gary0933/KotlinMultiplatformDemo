@@ -51,6 +51,7 @@ import kotlinmultiplatformdemo.composeapp.generated.resources.sign_up
 import kotlinx.coroutines.delay
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import storage.dataStorage
 import ui.components.BasicScreenUI
 import ui.components.Spacer_16dp
 import ui.components.Spacer_4dp
@@ -74,23 +75,32 @@ fun LoginScreen(
     var isPasswordVisible by remember { mutableStateOf(false) }
     var isUsernameError by rememberSaveable { mutableStateOf(false) }
     var isPasswordError by rememberSaveable { mutableStateOf(false) }
-    var showButtonLoading by rememberSaveable { mutableStateOf(false) }
 
-    val uiState: ManageUiState by loginViewModel.uiState.collectAsState()
+    val loginUiState: ManageUiState by loginViewModel.loginUiState.collectAsState()
 
-    LaunchedEffect(uiState.showRegisterSuccessAlert, showButtonLoading) {
-        if (uiState.showRegisterSuccessAlert) {
-            loginViewModel.closeRegisterSuccessAlert()
-        }
-        if(showButtonLoading) {
+    LaunchedEffect(loginUiState.showLoadingBar, loginUiState.showAlert) {
+        if (loginUiState.showLoadingBar) {
             delay(1000)
-            navigateToMain()
+            dataStorage.putBoolean("loginSuccess", true)
+            loginViewModel.updateShowLoadingButtonStatus(false)
+
+            val result: Boolean = loginViewModel.login(
+                emailText,
+                passwordText
+            )
+            if (result) {
+                navigateToMain()
+            }
+        }
+
+        if (loginUiState.showAlert) {
+            loginViewModel.closeLoginSuccessAlert()
         }
     }
 
     BasicScreenUI(
         showTopBar = false,
-        uiState = uiState
+        uiState = loginUiState
     ) {
         Column(
             modifier = Modifier.fillMaxSize().padding(35.dp),
@@ -112,6 +122,7 @@ fun LoginScreen(
                 TextField(
                     isError = isUsernameError,
                     value = emailText,
+                    enabled = loginUiState.enableTextField,
                     onValueChange = {
                         emailText = it
                         isUsernameError = it.trim().isEmpty()
@@ -155,6 +166,7 @@ fun LoginScreen(
                 TextField(
                     isError = isPasswordError,
                     value = passwordText,
+                    enabled = loginUiState.enableTextField,
                     onValueChange = {
                         passwordText = it
                         isPasswordError = it.trim().isEmpty()
@@ -233,13 +245,14 @@ fun LoginScreen(
                     onClick = {
                         isUsernameError = emailText.trim().isEmpty()
                         isPasswordError = passwordText.trim().isEmpty()
-                        if (!isUsernameError && !isPasswordError) {
-                            showButtonLoading = true
+                        if (!isUsernameError && !isPasswordError && !loginUiState.showLoadingBar) {
+                            loginViewModel.updateShowLoadingButtonStatus(true)
+                            loginUiState.enableTextField = false
                         }
                     }
                 ) {
                     TextWithLoadingInButton(
-                        showLoading = showButtonLoading
+                        showLoading = loginUiState.showLoadingBar
                     ) {
                         Text(
                             text = stringResource(Res.string.sign_in),

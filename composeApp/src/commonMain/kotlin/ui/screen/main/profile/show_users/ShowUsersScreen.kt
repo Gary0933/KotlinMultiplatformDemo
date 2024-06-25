@@ -125,7 +125,7 @@ fun UserData(
                     .align(Alignment.BottomCenter)
                     .background(grey_050)
                     .noRippleClickable {
-                        showUsersViewModel.deleteUsersDataById(userInfoModel)
+                        showUsersViewModel.deleteUsersDataById(userInfoModel.Id)
                     },
                 contentAlignment = Alignment.Center
             ) {

@@ -9,6 +9,7 @@ import di.appModule
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinApplication
 import org.koin.compose.koinInject
+import storage.dataStorage
 import ui.navigation.AppNavigation
 import ui.screen.login.LoginScreen
 import ui.screen.login.register.RegisterScreen
@@ -22,6 +23,8 @@ fun App() {
     KoinApplication(application = { // 依赖注入管理
         modules(appModule()) // 导入定义的module
     }) {
+
+        dataStorage.putBoolean("loginSuccess", false)
 
         DemoTheme{
 
@@ -37,15 +40,27 @@ fun App() {
                 ) {
                     // 定义登录页面的渲染方法
                     composable(route = AppNavigation.Login.route) {
-                        LoginScreen(
-                            loginViewModel = loginViewModel,
-                            navigateToMain = {
-                                navigator.navigate(AppNavigation.Main.route)
-                            },
-                            navigateToRegister = {
-                                navigator.navigate(AppNavigation.Register.route)
-                            }
-                        )
+                        val loginSuccess = dataStorage.getBoolean("loginSuccess", false)
+                        if (!loginSuccess) {
+                            LoginScreen(
+                                loginViewModel = loginViewModel,
+                                navigateToMain = {
+                                    navigator.navigate(AppNavigation.Main.route)
+                                },
+                                navigateToRegister = {
+                                    navigator.navigate(AppNavigation.Register.route)
+                                }
+                            )
+                        } else {
+                            MainNavConfiguration(
+                                // 实现MainNavConfiguration里的参数，参数是一个名为logout的函数，当后续使用这个logout函数后会跳转回登录页面
+                                logout = {
+                                    navigator.popBackStack()
+                                    navigator.navigate(AppNavigation.Login.route)
+                                }
+                            )
+                        }
+
                     }
                     composable(route = AppNavigation.Register.route) {
                         RegisterScreen(

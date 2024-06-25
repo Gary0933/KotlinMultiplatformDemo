@@ -28,9 +28,7 @@ class ShowUsersViewModel(
         }
     }
 
-    fun deleteUsersDataById(
-        userInfoModel: UserInfoModel
-    ) {
-        userInfoHandler.deleteUserInfo(userInfoModel)
+    fun deleteUsersDataById(userId: Int) {
+        userInfoHandler.deleteUserInfo(userId)
     }
 }

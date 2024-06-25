@@ -20,9 +20,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import database.entity.UserInfoModel
 import kotlinmultiplatformdemo.composeapp.generated.resources.Res
 import kotlinmultiplatformdemo.composeapp.generated.resources.arrow_right
 import kotlinmultiplatformdemo.composeapp.generated.resources.coupon
@@ -36,20 +39,25 @@ import kotlinmultiplatformdemo.composeapp.generated.resources.warning
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.koinInject
 import ui.components.CircleImage
 import ui.components.Spacer_12dp
 import ui.components.Spacer_16dp
 import ui.components.Spacer_32dp
 import ui.components.Spacer_8dp
 import ui.components.noRippleClickable
+import ui.screen.main.profile.view_model.ProfileViewModel
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun ProfileScreen(
+    profileViewModel: ProfileViewModel = koinInject(),
     navigateToMyOrders: () -> Unit,
     navigateToShowUsers: () -> Unit,
     navigateToSettings: () -> Unit
 ) {
+
+    val currentUserInfo: UserInfoModel by profileViewModel.currentUserInfo.collectAsState()
+
     Scaffold {
         Box(
             modifier = Modifier.padding(top = it.calculateTopPadding())
@@ -76,7 +84,7 @@ fun ProfileScreen(
                 Spacer_16dp()
 
                 Text(
-                    text = "Gary",
+                    text = currentUserInfo.UserName,
                     style = MaterialTheme.typography.headlineMedium
                 )
 

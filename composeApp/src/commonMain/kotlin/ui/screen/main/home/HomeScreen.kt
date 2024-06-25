@@ -8,11 +8,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import storage.dataStorage
 import ui.components.BasicScreenUI
 import ui.theme.PrimaryColor
 
 @Composable
 fun HomeScreen() {
+
+    dataStorage.putString("homeContent","This is home screen")
 
     BasicScreenUI(
         showTopBar = false,
@@ -23,7 +26,7 @@ fun HomeScreen() {
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "This is home screen",
+                    text = dataStorage.getString("homeContent", "no data"),
                     style = MaterialTheme.typography.labelLarge,
                     color = PrimaryColor,
                 )

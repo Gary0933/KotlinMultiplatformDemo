@@ -57,7 +57,7 @@ fun ProfileNavConfiguration(logout: () -> Unit) {
                 backOnTopBar = {
                     navigator.popBackStack()
                 },
-                logout = logout
+                backToLogin = logout
             )
         }
     }

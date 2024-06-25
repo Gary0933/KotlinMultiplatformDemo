@@ -75,7 +75,6 @@ import ui.theme.DefaultTextFieldTheme
 import ui.theme.IconColorGrey
 import ui.theme.PrimaryColor
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun RegisterScreen(
     loginViewModel: LoginViewModel,
@@ -93,10 +92,10 @@ fun RegisterScreen(
     var passwordError by rememberSaveable { mutableStateOf(false) }
     var confirmPasswordError by rememberSaveable { mutableStateOf(false) }
 
-    val uiState: ManageUiState by loginViewModel.uiState.collectAsState()
+    val registerUiState: ManageUiState by loginViewModel.registerUiState.collectAsState()
 
-    LaunchedEffect(uiState.showRegisterSuccessAlert) {
-        if (uiState.showRegisterSuccessAlert) {
+    LaunchedEffect(registerUiState.showAlert) {
+        if (registerUiState.showAlert) {
             loginViewModel.closeRegisterSuccessAlert()
             navigateToLogin() // 注册成功的弹窗关闭后, 自动跳转到登录页面
         }
@@ -104,7 +103,7 @@ fun RegisterScreen(
 
     BasicScreenUI(
         showTopBar = false,
-        uiState = uiState
+        uiState = registerUiState
     ) {
         Column(
             modifier = Modifier
@@ -136,7 +135,7 @@ fun RegisterScreen(
                 Spacer_8dp()
                 TextField(
                     isError = nameError,
-                    enabled = uiState.enableTextField,
+                    enabled = registerUiState.enableTextField,
                     value = nameText,
                     onValueChange = {
                         nameText = it.trim()
@@ -172,7 +171,7 @@ fun RegisterScreen(
                 Spacer_8dp()
                 TextField(
                     isError = emailError,
-                    enabled = uiState.enableTextField,
+                    enabled = registerUiState.enableTextField,
                     value = emailText,
                     onValueChange = {
                         emailText = it.trim()
@@ -208,7 +207,7 @@ fun RegisterScreen(
                 Spacer_8dp()
                 TextField(
                     isError = passwordError,
-                    enabled = uiState.enableTextField,
+                    enabled = registerUiState.enableTextField,
                     modifier = Modifier
                         .fillMaxWidth()
                         .border(1.dp, PrimaryColor, MaterialTheme.shapes.small),
@@ -267,7 +266,7 @@ fun RegisterScreen(
                 Spacer_8dp()
                 TextField(
                     isError = confirmPasswordError,
-                    enabled = uiState.enableTextField,
+                    enabled = registerUiState.enableTextField,
                     modifier = Modifier
                         .fillMaxWidth()
                         .border(1.dp, PrimaryColor, MaterialTheme.shapes.small),
@@ -374,7 +373,7 @@ fun RegisterScreen(
                             contentAlignment = Alignment.CenterEnd
                         ) {
                             LoadingBar(
-                                showLoading = uiState.showLoadingBar,
+                                showLoading = registerUiState.showLoadingBar,
                                 modifier = Modifier
                                     .size(25.dp),
                                 strokeWidth = 2.dp,

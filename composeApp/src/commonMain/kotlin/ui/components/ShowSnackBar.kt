@@ -7,22 +7,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import business.data_state.ManageUiState
 
 @Composable
 fun ShowSnackBar(
-    message: String,
-    modifier: Modifier = Modifier.padding(16.dp),
-    snackBarVisibleState: Boolean
+    uiState: ManageUiState,
+    modifier: Modifier = Modifier.padding(40.dp)
 ) {
 
-    if (snackBarVisibleState) {
+    if (uiState.showAlert) {
         // Show the SnackBar
         Snackbar(
             modifier = modifier,
             action = {}
         ) {
             Text(
-                text = message,
+                text = uiState.alertMessage,
                 style = MaterialTheme.typography.bodyMedium
             )
         }
