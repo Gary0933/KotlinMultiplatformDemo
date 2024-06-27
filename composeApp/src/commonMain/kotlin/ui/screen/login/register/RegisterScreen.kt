@@ -59,8 +59,6 @@ import kotlinmultiplatformdemo.composeapp.generated.resources.password
 import kotlinmultiplatformdemo.composeapp.generated.resources.sign_in
 import kotlinmultiplatformdemo.composeapp.generated.resources.sign_up
 import kotlinmultiplatformdemo.composeapp.generated.resources.terms_condition
-import kotlinx.coroutines.delay
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import ui.components.BasicScreenUI
@@ -78,7 +76,7 @@ import ui.theme.PrimaryColor
 @Composable
 fun RegisterScreen(
     loginViewModel: LoginViewModel,
-    navigateToLogin: () -> Unit
+    navigateToLogin: () -> Unit,
 ) {
     var nameText by remember { mutableStateOf("") }
     var emailText by remember { mutableStateOf("") }
@@ -93,17 +91,20 @@ fun RegisterScreen(
     var confirmPasswordError by rememberSaveable { mutableStateOf(false) }
 
     val registerUiState: ManageUiState by loginViewModel.registerUiState.collectAsState()
+    val registerResult: Boolean by loginViewModel.registerResultState.collectAsState()
 
     LaunchedEffect(registerUiState.showAlert) {
         if (registerUiState.showAlert) {
-            loginViewModel.closeRegisterSuccessAlert()
-            navigateToLogin() // 注册成功的弹窗关闭后, 自动跳转到登录页面
+            loginViewModel.closeRegisterResultAlert()
+            if (registerResult) {
+                navigateToLogin() // 注册成功的弹窗关闭后, 自动跳转到登录页面
+            }
         }
     }
 
     BasicScreenUI(
         showTopBar = false,
-        uiState = registerUiState
+        uiState = registerUiState,
     ) {
         Column(
             modifier = Modifier
@@ -111,14 +112,14 @@ fun RegisterScreen(
                 .padding(horizontal = 35.dp)
                 .verticalScroll(rememberScrollState()), // 可以垂直滚动页面
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.Center,
         ) {
             // title
             Text(
                 stringResource(Res.string.create_account),
                 style = MaterialTheme.typography.displaySmall,
                 fontWeight = FontWeight.Bold,
-                color = PrimaryColor
+                color = PrimaryColor,
             )
             Spacer_32dp()
 
@@ -130,7 +131,7 @@ fun RegisterScreen(
                 Text(
                     text = stringResource(Res.string.name),
                     fontSize = 15.sp,
-                    color = PrimaryColor
+                    color = PrimaryColor,
                 )
                 Spacer_8dp()
                 TextField(
@@ -157,7 +158,7 @@ fun RegisterScreen(
                     Text(
                         text = "Name length need between 1 to 12 digits",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.error
+                        color = MaterialTheme.colorScheme.error,
                     )
                 }
                 Spacer_8dp()
@@ -166,7 +167,7 @@ fun RegisterScreen(
                 Text(
                     text = stringResource(Res.string.email),
                     fontSize = 15.sp,
-                    color = PrimaryColor
+                    color = PrimaryColor,
                 )
                 Spacer_8dp()
                 TextField(
@@ -220,9 +221,11 @@ fun RegisterScreen(
                         passwordError = it.trim().length < 6 || it.trim().length > 12
                     },
                     trailingIcon = { // 在输入框末尾添加一个图标
-                        IconButton(onClick = {
-                            isPasswordVisible = !isPasswordVisible
-                        }) {
+                        IconButton(
+                            onClick = {
+                                isPasswordVisible = !isPasswordVisible
+                            }
+                        ) {
                             when (isPasswordVisible) {
                                 true -> Icon(
                                     painter = painterResource(Res.drawable.ic_password_hide),
@@ -252,7 +255,7 @@ fun RegisterScreen(
                     Text(
                         text = "Password must between 6 to 12 digits",
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.error
+                        color = MaterialTheme.colorScheme.error,
                     )
                 }
                 Spacer_8dp()
@@ -261,7 +264,7 @@ fun RegisterScreen(
                 Text(
                     text = "Confirm Password",
                     fontSize = 15.sp,
-                    color = PrimaryColor
+                    color = PrimaryColor,
                 )
                 Spacer_8dp()
                 TextField(
@@ -285,7 +288,7 @@ fun RegisterScreen(
                     keyboardOptions = KeyboardOptions(
                         imeAction = ImeAction.Done,
                         keyboardType = KeyboardType.Password,
-                    )
+                    ),
                 )
                 Spacer_4dp()
                 AnimatedVisibility(visible = confirmPasswordError) {
@@ -407,7 +410,7 @@ fun RegisterScreen(
                     },
                     text = stringResource(Res.string.sign_in),
                     color = MaterialTheme.colorScheme.primary,
-                    textDecoration = TextDecoration.Underline
+                    textDecoration = TextDecoration.Underline,
                 )
             }
         }

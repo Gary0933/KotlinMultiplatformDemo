@@ -6,10 +6,8 @@ import coil3.ImageLoader
 import coil3.compose.rememberAsyncImagePainter
 import kotlinmultiplatformdemo.composeapp.generated.resources.Res
 import kotlinmultiplatformdemo.composeapp.generated.resources.default_image_loader
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.painterResource
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun rememberCustomImagePainter(
     model: Any?,
@@ -19,10 +17,9 @@ fun rememberCustomImagePainter(
     model, imageLoader,
     error = painterResource(Res.drawable.default_image_loader),
     placeholder = painterResource(Res.drawable.default_image_loader),
-    contentScale = contentScale
+    contentScale = contentScale,
 )
 
-@OptIn(ExperimentalResourceApi::class)
 @Composable
 fun rememberCustomImagePainter(
     model: Any?,

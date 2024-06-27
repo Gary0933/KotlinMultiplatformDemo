@@ -20,14 +20,12 @@ private val lightColorPalette = lightColorScheme(
     background = Color.White,
     surfaceVariant = Color.White,
     surface = lightSurface,
-
-
 )
 
 @Composable
 fun DemoTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val colors = if (darkTheme) {
         darkColorPalette
@@ -37,8 +35,8 @@ fun DemoTheme(
 
     MaterialTheme(
         colorScheme = colors,
-        typography = LatoTypography(),
+        typography = latoTypography(),
         shapes = myShapes,
-        content = content
+        content = content,
     )
 }

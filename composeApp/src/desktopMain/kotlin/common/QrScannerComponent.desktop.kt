@@ -10,7 +10,7 @@ actual fun QrScannerComponent(
     launchGallery: Boolean,
     onCompletion: (String) -> Unit,
     onGalleryCallBackHandler: (Boolean) -> Unit,
-    onFailure: (String) -> Unit
+    onFailure: (String) -> Unit,
 ) {
     // do noting, desktop can not use qr scanner
 }

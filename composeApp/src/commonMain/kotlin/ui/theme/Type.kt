@@ -17,13 +17,12 @@ import kotlinmultiplatformdemo.composeapp.generated.resources.lato_light_italic
 import kotlinmultiplatformdemo.composeapp.generated.resources.lato_regular
 import kotlinmultiplatformdemo.composeapp.generated.resources.lato_thin
 import kotlinmultiplatformdemo.composeapp.generated.resources.lato_thin_italic
-import org.jetbrains.compose.resources.ExperimentalResourceApi
 import org.jetbrains.compose.resources.Font
 
+
 // Set of Material typography styles to start with
-@OptIn(ExperimentalResourceApi::class)
 @Composable
-fun LatoTypography(): Typography {
+fun latoTypography(): Typography {
     val lato = FontFamily(
         Font(
             resource = Res.font.lato_regular, // 这里是composeApp->commonMain->composeResources->font下的字体文件

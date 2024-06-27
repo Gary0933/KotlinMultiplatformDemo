@@ -6,7 +6,7 @@ import business.data_state.ItemData
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class CartViewModel: ViewModel() {
+class CartViewModel : ViewModel() {
 
     private var _cartListState = MutableStateFlow(emptyList<CartState>())
     val cartListState: StateFlow<List<CartState>> = _cartListState

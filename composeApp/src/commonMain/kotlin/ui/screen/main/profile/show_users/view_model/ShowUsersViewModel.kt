@@ -9,9 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-class ShowUsersViewModel(
-    db: DbEngine
-): ViewModel() {
+class ShowUsersViewModel(db: DbEngine) : ViewModel() {
 
     private var userInfoHandler: UserInfoHandler = UserInfoHandler(db)
 

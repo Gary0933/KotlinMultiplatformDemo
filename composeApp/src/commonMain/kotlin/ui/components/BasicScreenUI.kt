@@ -37,17 +37,17 @@ fun BasicScreenUI(
                 Row(
                     modifier = Modifier.fillMaxWidth().padding(16.dp),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.SpaceBetween,
                 ) {
                     CircleButton(
                         modifier = Modifier.size(50.dp),
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        onClick = { backOnTopBarOnClick() }
+                        onClick = { backOnTopBarOnClick() },
                     )
                     if (toolbarTitle != null) {
                         Text(
                             text = toolbarTitle,
-                            style = MaterialTheme.typography.titleLarge
+                            style = MaterialTheme.typography.titleLarge,
                         )
                     }
                     Spacer_50dp() // 这里的大小要跟上面CircleButton保持一致，才能保证Text居中显示
@@ -60,14 +60,14 @@ fun BasicScreenUI(
                 .padding(top = it.calculateTopPadding())
                 .fillMaxSize()
                 .background(backGroundColor),
-            contentAlignment = contentAlignment
+            contentAlignment = contentAlignment,
         ) {
             content()
 
             if (uiState != null) {
                 ShowSnackBar(
                     uiState = uiState,
-                    modifier = Modifier.align(Alignment.BottomCenter)
+                    modifier = Modifier.align(Alignment.BottomCenter),
                 )
             }
         }

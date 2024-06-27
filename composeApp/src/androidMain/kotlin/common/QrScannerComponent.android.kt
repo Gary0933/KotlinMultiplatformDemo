@@ -11,7 +11,7 @@ actual fun QrScannerComponent(
     launchGallery: Boolean,
     onCompletion: (String) -> Unit,
     onGalleryCallBackHandler: (Boolean) -> Unit,
-    onFailure: (String) -> Unit
+    onFailure: (String) -> Unit,
 ) {
     QrScanner(
         modifier = modifier,
@@ -19,6 +19,6 @@ actual fun QrScannerComponent(
         launchGallery = launchGallery,
         onCompletion = onCompletion,
         onGalleryCallBackHandler = onGalleryCallBackHandler,
-        onFailure = onFailure
+        onFailure = onFailure,
     )
 }

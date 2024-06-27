@@ -15,7 +15,7 @@ fun HomeNavConfiguration() {
     NavHost(
         startDestination = HomeNavigation.Home.route,
         navController = navigator,
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) {
         composable(route = HomeNavigation.Home.route) {
             HomeScreen()

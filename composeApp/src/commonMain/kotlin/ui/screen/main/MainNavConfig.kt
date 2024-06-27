@@ -37,19 +37,20 @@ import ui.theme.DefaultNavigationBarItemTheme
 @Composable
 fun MainNavConfiguration(
     mainViewModel: MainViewModel = koinInject(),
-    logout: () -> Unit
+    logout: () -> Unit,
 ) {
     val navBottomBarController = rememberNavController()
     val isBottomBarVisible by mainViewModel.isBottomBarVisible.collectAsState()
 
     ChangeStatusBarColors(Color.White) // 修改样式不支持跨平台，需要在各自的平台里实现(composeApp里各种模块的common文件夹下)
 
-    Scaffold(bottomBar = {
-        if (isBottomBarVisible) {
-            BottomNavigationUI(navController = navBottomBarController)
+    Scaffold(
+        bottomBar = {
+            if (isBottomBarVisible) {
+                BottomNavigationUI(navController = navBottomBarController)
+            }
         }
-
-    }) { innerPadding ->
+    ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
             NavHost(
                 startDestination = MainNavigation.Home.route,
@@ -83,9 +84,7 @@ fun MainNavConfiguration(
 }
 
 @Composable
-fun BottomNavigationUI(
-    navController: NavController,
-) {
+fun BottomNavigationUI(navController: NavController) {
 
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -95,13 +94,13 @@ fun BottomNavigationUI(
         elevation = CardDefaults.cardElevation(10.dp),
         shape = RoundedCornerShape(
             topStart = 8.dp,
-            topEnd = 8.dp
+            topEnd = 8.dp,
         )
     ) {
         NavigationBar(
             containerColor = MaterialTheme.colorScheme.background,
             contentColor = MaterialTheme.colorScheme.background,
-            tonalElevation = 8.dp
+            tonalElevation = 8.dp,
         ) {
 
             val items = listOf(

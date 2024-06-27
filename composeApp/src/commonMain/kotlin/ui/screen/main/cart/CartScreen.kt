@@ -51,7 +51,7 @@ import ui.theme.myShapes
 @Composable
 fun CartScreen(
     cartViewModel: CartViewModel,
-    navigateToAddToCart: () -> Unit
+    navigateToAddToCart: () -> Unit,
 ) {
     BasicScreenUI(
         showTopBar = false

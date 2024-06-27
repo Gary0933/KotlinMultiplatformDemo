@@ -7,9 +7,7 @@ import database.entity.UserInfoModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
-class ProfileViewModel(
-    db: DbEngine,
-) : ViewModel() {
+class ProfileViewModel(db: DbEngine) : ViewModel() {
 
     private var userInfoHandler: UserInfoHandler = UserInfoHandler(db) // 操作userinfo表的数据
 

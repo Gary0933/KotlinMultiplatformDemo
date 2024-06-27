@@ -64,7 +64,6 @@ fun AddToCartScreen(
     navigateToCart: () -> Unit,
     navigateToScanner: () -> Unit,
 ) {
-
     BasicScreenUI(
         toolbarTitle = "Add To Cart",
         backOnTopBarOnClick = navigateToCart
@@ -199,7 +198,7 @@ fun AddToCartScreen(
                 }
 
                 // Product items
-                itemsIndexed (
+                itemsIndexed(
                     addCartDataState.productItemList,
                     /**
                      * Compose默认会使用index的索引作为键, 当你使用key参数时，你正在为列表中的每个项目指定一个唯一的标识符
@@ -211,7 +210,7 @@ fun AddToCartScreen(
                      * 此时Compose会使用你设置的key来作为键，当列表数据发生变化后(增删改),根据键来处理如何更新列表
                      * 这里不使用index作为键的原因是,index会随着某一个数据的删除或修改导致整个列表的index发生错乱，页面根据index重载会出问题
                      */
-                    key = { index, value -> value.itemId }
+                    key = { index, value -> value.itemId },
                 ) { index, value ->
                     itemCard {
                         if (addCartDataState.productItemList.size <= 1) {
@@ -459,9 +458,7 @@ fun AddToCartScreen(
 }
 
 @Composable
-fun itemCard(
-    content: @Composable () -> Unit,
-) {
+fun itemCard(content: @Composable () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -475,9 +472,7 @@ fun itemCard(
 }
 
 @Composable
-fun cardWithSelectedOption(
-    content: @Composable () -> Unit,
-) {
+fun cardWithSelectedOption(content: @Composable () -> Unit) {
     val expanded = remember { mutableStateOf(false) }
 
     Row(

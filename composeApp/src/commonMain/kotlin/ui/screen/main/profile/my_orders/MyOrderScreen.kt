@@ -34,9 +34,7 @@ const val SHIPPING_SUCCESS = 1
 const val SHIPPING_FAILED = 2
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ProfileMyOrdersScreen(
-    backOnTopBar: () -> Unit,
-) {
+fun ProfileMyOrdersScreen(backOnTopBar: () -> Unit) {
 
     val tabList by remember {
         mutableStateOf(
@@ -136,6 +134,6 @@ private fun MyOrdersList(content: String) {
         style = MaterialTheme.typography.titleLarge,
         color = BorderColor,
         modifier = Modifier.fillMaxSize().padding(top = 64.dp),
-        textAlign = TextAlign.Center
+        textAlign = TextAlign.Center,
     )
 }

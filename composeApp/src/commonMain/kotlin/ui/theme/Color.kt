@@ -15,5 +15,4 @@ val grey_050 = Color(0xFFfafafa) // Use with black text
 val backgroundLightGrey = Color(0xFFF7F7F7)
 val placeholderGrey = Color(0xFFCCCCCC)
 var DeletedColor = Color(0xFFD52B2B)
-var LightPrimaryColor = Color(0xFF7EA9B5)
 var QrScannerBackground = Color(0xFF404649).copy(alpha = 0.9f)//33代表80%透明

@@ -25,7 +25,7 @@ import ui.theme.DeletedColor
 import ui.theme.PrimaryColor
 
 
-data class SwipeConfiguration (
+data class SwipeConfiguration(
     var swipeToLeft: Boolean = false,
     var swipeToRight: Boolean = false,
     var swipeToLeftColor: Color = DeletedColor,

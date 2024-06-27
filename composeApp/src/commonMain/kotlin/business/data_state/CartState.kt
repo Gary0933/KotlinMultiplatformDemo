@@ -1,12 +1,12 @@
 package business.data_state
 
-data class CartState (
+data class CartState(
     var productId: String = "",
     var productType: String = "",
-    var productItemList: MutableList<ItemData> = mutableListOf()
+    var productItemList: MutableList<ItemData> = mutableListOf(),
 )
 
-data class ItemData (
+data class ItemData(
     val itemId: Int,
-    var itemText: String
+    var itemText: String,
 )

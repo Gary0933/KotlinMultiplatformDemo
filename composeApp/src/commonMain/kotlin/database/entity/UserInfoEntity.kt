@@ -16,12 +16,12 @@ data class UserInfoModel(
     val UserEmail: String = "",
     val UserPassword: String = "",
     val IsLogin: Int = 0,
-    val CreateDate: String? = null // 可以为空
+    val CreateDate: String? = null, // 可以为空
 )
 
 class UserInfoHandler(
     private var db: DbEngine,
-    private var coroutineContext: CoroutineContext = DB_COROUTINE_CONTEXT
+    private var coroutineContext: CoroutineContext = DB_COROUTINE_CONTEXT,
 ) {
     // 由于数据库的类型跟kotlin定义的类型有区别，需要转换
     private fun mapUserInfoList(
@@ -38,39 +38,33 @@ class UserInfoHandler(
             UserEmail = UserEmail,
             UserPassword = UserPassword,
             IsLogin = IsLogin?.toInt() ?: 0,
-            CreateDate = CreateDate ?: ""
+            CreateDate = CreateDate ?: "",
         )
     }
 
-    internal fun getAllUserInfo(
-        userInfoModel: UserInfoModel?
-    ): List<UserInfoModel> {
+    internal fun getAllUserInfo(userInfoModel: UserInfoModel?): List<UserInfoModel> {
         return if (userInfoModel == null) {
             db.dbQuery.getAllUserInfo(::mapUserInfoList).executeAsList()
         } else {
             db.dbQuery.getUserInfoById(
                 userInfoModel.Id.toLong(),
-                ::mapUserInfoList
+                ::mapUserInfoList,
             ).executeAsList()
         }
     }
 
-    internal fun getAllUserInfoFlow(
-        userInfoModel: UserInfoModel?
-    ): Flow<List<UserInfoModel>> {  // 返回一个存储实时数据的Flow
+    internal fun getAllUserInfoFlow(userInfoModel: UserInfoModel?): Flow<List<UserInfoModel>> {  // 返回一个存储实时数据的Flow
         return if (userInfoModel == null) {
             db.dbQuery.getAllUserInfo(::mapUserInfoList).asFlow().mapToList(coroutineContext)
         } else {
             db.dbQuery.getUserInfoById(
                 userInfoModel.Id.toLong(),
-                ::mapUserInfoList
+                ::mapUserInfoList,
             ).asFlow().mapToList(coroutineContext)
         }
     }
 
-    internal fun insertUserInfo(
-        item: UserInfoModel
-    ) {
+    internal fun insertUserInfo(item: UserInfoModel) {
         db.dbQuery.transaction {
             item.run {
                 db.dbQuery.insertUserInfo(
@@ -80,7 +74,7 @@ class UserInfoHandler(
                         UserEmail,
                         UserPassword,
                         IsLogin.toLong(),
-                        CreateDate
+                        CreateDate,
                     )
                 )
             }
@@ -101,14 +95,12 @@ class UserInfoHandler(
         db.dbQuery.transaction {
             db.dbQuery.updateLoginStatus(
                 isLogin.toLong(),
-                userId.toLong()
+                userId.toLong(),
             )
         }
     }
 
-    internal fun checkLoginStatus(
-        userInfoModel: UserInfoModel
-    ): Int {
+    internal fun checkLoginStatus(userInfoModel: UserInfoModel): Int {
         val result: GetLoginStatusById? = db.dbQuery.getLoginStatusById(userInfoModel.Id.toLong()).executeAsOneOrNull()
         return if (result == null) {
             0
@@ -122,15 +114,11 @@ class UserInfoHandler(
         return result != null
     }
 
-    internal fun validateUserInfo(
-        userEmail: String,
-        userPassword: String
-    ): Int{
+    internal fun validateUserInfo(userEmail: String, userPassword: String): Int{
         val result: UserInfo? = db.dbQuery.validateUserInfo(
             userEmail,
             userPassword
         ).executeAsOneOrNull()
-
         return result?.Id?.toInt() ?: 0
     }
 

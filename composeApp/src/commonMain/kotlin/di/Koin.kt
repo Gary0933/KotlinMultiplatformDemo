@@ -14,19 +14,15 @@ import ui.screen.main.profile.view_model.ProfileViewModel
 
 fun appModule() = module {
 
-    single {
-        DbEngine(databaseDriverFactory = get())
-    }
-    single {
-        DatabaseDriverFactory()
-    }
+    single { DbEngine(databaseDriverFactory = get()) }
+    single { DatabaseDriverFactory() }
+    single { MainViewModel() }
+
     factory { LoginViewModel(db = get()) }
     factory { ShowUsersViewModel(db = get()) }
     factory { HomeViewModel() }
     factory { CartViewModel() }
     factory { SettingViewModel(db = get()) }
     factory { ProfileViewModel(db = get()) }
-    single {
-        MainViewModel()
-    }
+
 }

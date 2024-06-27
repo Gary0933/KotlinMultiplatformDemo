@@ -20,14 +20,13 @@ import ui.theme.DemoTheme
 @Composable
 @Preview
 fun App() {
-    KoinApplication(application = { // 依赖注入管理
-        modules(appModule()) // 导入定义的module
-    }) {
+    KoinApplication(
+        application = { modules(appModule()) }// 依赖注入管理，导入定义的module
+    ) {
 
         dataStorage.putBoolean("loginSuccess", false)
 
-        DemoTheme{
-
+        DemoTheme {
             val navigator = rememberNavController()
             val loginViewModel: LoginViewModel = koinInject()
 
@@ -36,7 +35,7 @@ fun App() {
                     navController = navigator,
                     startDestination = AppNavigation.Login.route, // 定义初始页面是登录页面
                     //startDestination = AppNavigation.Main.route, // 定义直接页面是主页
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
                 ) {
                     // 定义登录页面的渲染方法
                     composable(route = AppNavigation.Login.route) {
@@ -49,7 +48,7 @@ fun App() {
                                 },
                                 navigateToRegister = {
                                     navigator.navigate(AppNavigation.Register.route)
-                                }
+                                },
                             )
                         } else {
                             MainNavConfiguration(
@@ -67,7 +66,7 @@ fun App() {
                             loginViewModel = loginViewModel,
                             navigateToLogin = {
                                 navigator.popBackStack()
-                            }
+                            },
                         )
                     }
                     composable(route = AppNavigation.Main.route) {

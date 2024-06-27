@@ -1,12 +1,10 @@
 package ui.navigation
 
-sealed class AppNavigation(
-    val route: String
-) {
-    data object Login : AppNavigation(route = "Login")
+import androidx.navigation.NamedNavArgument
 
-    data object Register : AppNavigation(route = "Register")
-
-    data object Main : AppNavigation(route = "Main")
+sealed class AppNavigation(val route: String, val arguments: List<NamedNavArgument>) {
+    data object Login : AppNavigation(route = "Login", arguments = emptyList())
+    data object Register : AppNavigation(route = "Register", arguments = emptyList())
+    data object Main : AppNavigation(route = "Main", arguments = emptyList())
 
 }

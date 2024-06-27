@@ -5,9 +5,7 @@ import database.DbEngine
 import database.entity.UserInfoHandler
 import database.entity.UserInfoModel
 
-class SettingViewModel(
-    db: DbEngine,
-): ViewModel() {
+class SettingViewModel(db: DbEngine) : ViewModel() {
 
     private var userInfoHandler: UserInfoHandler = UserInfoHandler(db) // 操作userinfo表的数据
 

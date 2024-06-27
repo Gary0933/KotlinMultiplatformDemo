@@ -10,7 +10,7 @@ actual class DatabaseDriverFactory {
         return AndroidSqliteDriver(
             AppDatabase.Schema,
             ActivityUtils.getTopActivity(), // 利用第三方插件获取android的Context
-            "kmd.db"
+            "kmd.db",
         )
     }
 }

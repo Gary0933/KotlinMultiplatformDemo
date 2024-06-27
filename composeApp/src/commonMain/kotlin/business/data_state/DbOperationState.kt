@@ -1,8 +1,7 @@
 package business.data_state
 
-import database.entity.UserInfoModel
 
 sealed class DbOperationState<T> {
-    data class OperateState<T> (var status: Boolean): DbOperationState<T> ()
-    data class InsertDataState<T> (var insertData: UserInfoModel): DbOperationState<T> ()
+    data class OperateStatus<T>(var inProcess: Boolean) : DbOperationState<T>()
+    data class OperateData<T>(var data: Any) : DbOperationState<T>()
 }

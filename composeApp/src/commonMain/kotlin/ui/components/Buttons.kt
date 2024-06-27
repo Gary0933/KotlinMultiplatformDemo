@@ -25,7 +25,7 @@ import ui.theme.BorderColor
 fun CircleButton(
     modifier: Modifier = Modifier,
     imageVector: ImageVector,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Card(
         modifier = modifier,
@@ -34,11 +34,11 @@ fun CircleButton(
         border = BorderStroke(1.dp, BorderColor),
         onClick = {
             onClick()
-        }
+        },
     ) {
         Box(
             modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+            contentAlignment = Alignment.Center,
         ) {
             Icon(imageVector, null)
         }
@@ -62,19 +62,17 @@ fun TextWithLoadingInButton(
             Box (
                 Modifier
                     .weight(1f),
-                contentAlignment = Alignment.CenterEnd
+                contentAlignment = Alignment.CenterEnd,
             ) {
                 LoadingBar(
                     showLoading = showLoading,
                     modifier = Modifier
                         .size(loadingBarSize),
                     strokeWidth = 2.dp,
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.background,
                 )
             }
-
             content()
-
             Spacer(Modifier.weight(1f))
         }
     } else {

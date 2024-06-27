@@ -13,13 +13,13 @@ fun LoadingBar(
     showLoading: Boolean = false,
     modifier: Modifier = Modifier,
     strokeWidth: Dp = 2.dp,
-    color: Color = MaterialTheme.colorScheme.background
+    color: Color = MaterialTheme.colorScheme.background,
 ) {
     if (showLoading) {
         CircularProgressIndicator(
             modifier = modifier,
             strokeWidth = strokeWidth, // loading指示器的线条宽度
-            color = color
+            color = color,
         )
     }
 }

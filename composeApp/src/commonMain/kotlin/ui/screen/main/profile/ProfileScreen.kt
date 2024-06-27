@@ -53,7 +53,7 @@ fun ProfileScreen(
     profileViewModel: ProfileViewModel = koinInject(),
     navigateToMyOrders: () -> Unit,
     navigateToShowUsers: () -> Unit,
-    navigateToSettings: () -> Unit
+    navigateToSettings: () -> Unit,
 ) {
 
     val currentUserInfo: UserInfoModel by profileViewModel.currentUserInfo.collectAsState()
@@ -76,10 +76,7 @@ fun ProfileScreen(
 
                 Spacer_16dp()
 
-                CircleImage(
-                    image = "",
-                    modifier = Modifier.size(120.dp)
-                )
+                CircleImage(modifier = Modifier.size(120.dp))
 
                 Spacer_16dp()
 
@@ -139,16 +136,17 @@ private fun ProfileItemBox(
 ) {
 
     Column(
-        modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
-            .noRippleClickable { onClick() }) {
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .noRippleClickable { onClick() },
+    ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            horizontalArrangement = Arrangement.SpaceBetween,
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     painterResource(image),
                     null,
@@ -163,7 +161,7 @@ private fun ProfileItemBox(
                 painterResource(Res.drawable.arrow_right),
                 null,
                 tint = MaterialTheme.colorScheme.primary.copy(alpha = .7f),
-                modifier = Modifier.size(30.dp)
+                modifier = Modifier.size(30.dp),
             )
         }
 

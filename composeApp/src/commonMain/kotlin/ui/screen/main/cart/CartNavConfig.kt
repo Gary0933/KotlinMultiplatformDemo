@@ -14,7 +14,7 @@ import ui.screen.main.cart.view_model.CartViewModel
 @Composable
 fun CartNavConfiguration(
     mainViewModel: MainViewModel,
-    cartViewModel: CartViewModel = koinInject()
+    cartViewModel: CartViewModel = koinInject(),
 ) {
     val navigator = rememberNavController()
     NavHost(

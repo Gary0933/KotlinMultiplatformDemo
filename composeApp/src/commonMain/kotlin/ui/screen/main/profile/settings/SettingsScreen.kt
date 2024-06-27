@@ -31,7 +31,7 @@ import ui.theme.BorderColor
 fun ProfileSettingsScreen(
     settingViewModel: SettingViewModel = koinInject(),
     backOnTopBar: () -> Unit,
-    backToLogin: () -> Unit
+    backToLogin: () -> Unit,
 ) {
     BasicScreenUI(
         toolbarTitle = "Settings",

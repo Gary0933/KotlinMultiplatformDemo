@@ -12,18 +12,18 @@ import business.data_state.ManageUiState
 @Composable
 fun ShowSnackBar(
     uiState: ManageUiState,
-    modifier: Modifier = Modifier.padding(40.dp)
+    modifier: Modifier = Modifier.padding(40.dp),
 ) {
 
     if (uiState.showAlert) {
         // Show the SnackBar
         Snackbar(
             modifier = modifier,
-            action = {}
+            action = {},
         ) {
             Text(
                 text = uiState.alertMessage,
-                style = MaterialTheme.typography.bodyMedium
+                style = MaterialTheme.typography.bodyMedium,
             )
         }
     }

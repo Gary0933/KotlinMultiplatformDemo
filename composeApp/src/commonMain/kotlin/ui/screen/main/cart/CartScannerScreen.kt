@@ -44,7 +44,7 @@ import ui.theme.QrScannerBackground
 @Composable
 fun CartScannerScreen(
     cartViewModel: CartViewModel,
-    navigateToAddToCart: () -> Unit
+    navigateToAddToCart: () -> Unit,
 ) {
     var scannerBorderColor by remember { mutableStateOf(Color.Red) }
     var productId by remember { mutableStateOf("") }
@@ -158,7 +158,7 @@ fun CartScannerScreen(
                         }
                     )
                 }
-                Column (
+                Column(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(20.dp),
